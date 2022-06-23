@@ -10,7 +10,7 @@ namespace Core.Repository
     public interface IUserRepository : IBaseRepository<User>
     {
         bool IsExistingUser(string email);
-        UserViewModel GetUserByEmail(string email);
+        User GetUserByEmail(string email);
         void UpdateRefreshToken(int userId, string refreshToken);
     }
 }

@@ -21,9 +21,9 @@ namespace Repository
         public virtual DbSet<Amounts> Amounts { get; set; }
         public virtual DbSet<Deposites> Deposites { get; set; }
         public virtual DbSet<Members> Members { get; set; }
-        public virtual DbSet<Role> Role { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RoleUser> RoleUser { get; set; }
-        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
         
 
