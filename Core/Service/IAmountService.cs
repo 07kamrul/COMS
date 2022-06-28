@@ -11,7 +11,7 @@ namespace Core.Service
         Page<AmountResponse> Search(AmountRequestModel searchModel, int skip, int take);
         AmountResponse SaveAmount(AmountRequestModel amountRequestModel);
         List<AmountResponse> GetAmounts();
-        AmountResponse getAmount(int id);
+        AmountResponse GetAmount(int id);
         void DeleteAmount(int id);
         void UpdateAmount(AmountRequestModel amountRequestModel);
         Stream GetAttachmentFile(int id);
