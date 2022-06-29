@@ -19,6 +19,7 @@ namespace Core.Service
         void DeleteMember(int id);
         void UpdateMember(MemberRequestModel memberRequestModel);
         Stream GetAttachmentFile(int id);
+        void VerifyMember(int memberId, bool isVerify);
 
     }
 }

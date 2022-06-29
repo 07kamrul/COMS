@@ -12,15 +12,14 @@ namespace Core.Service
 {
     public interface IDepositService
     {
-        Page<DepositResponse> Search(DepositResponse searchModel, int skip, int take);
+        Page<DepositResponse> Search(DepositSearchRequestModel searchModel, int skip, int take);
         DepositResponse SaveDeposit(DepositRequestModel depositRequestModel);
         List<DepositResponse> GetDeposits();
+        List<DepositResponse> GetDepositsByMemberId(int memberId);
         DepositResponse GetDeposit(int id);
         void DeleteDeposit(int id);
         void UpdateDeposit(DepositRequestModel depositRequestModel);
         Stream GetAttachmentFile(int id);
-        void VerifyDeposit(int amountId, bool isVerify);
-        bool IsUnique(string memberId);
-        List<string> CheckUnique(string memberId);
+        void VerifyDeposit(int depositId, bool isVerify);
     }
 }

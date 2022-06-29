@@ -12,5 +12,8 @@ namespace Model
         public int Amount { get; set; }
         public DateTime AmountDate { get; set; }
         public int DipositeId { get; set; }
+        public bool IsVerified { get; set; }
+        public int VerifiedBy { get; set; }
+        public DateTime? VerificationDate { get; set; }
     }
 }

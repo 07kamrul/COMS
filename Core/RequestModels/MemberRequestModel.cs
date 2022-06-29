@@ -27,5 +27,8 @@ namespace Core.RequestModels
         public string Occupation { get; set; }
         public string Designation { get; set; }
         public string Company { get; set; }
+        public bool IsVerified { get; set; }
+        public int VerifiedBy { get; set; }
+        public DateTime? VerificationDate { get; set; }
     }
 }

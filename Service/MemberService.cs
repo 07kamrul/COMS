@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Core.Common;
+using Core.FileStore;
 using Core.Repository;
 using Core.RequestModels;
 using Core.Service;
 using Core.ViewModel;
+using Microsoft.Extensions.Configuration;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -16,13 +18,20 @@ namespace Service
 {
     public class MemberService : IMemberService
     {
-        IMapper _mapper;
-        IMemberRepository _memberRepository;
+        private readonly IMapper _mapper;
+        private readonly IMemberRepository _memberRepository;
+        private readonly IAttachmentRepository _attachmentRepository;
+        private readonly IFileStore _fileStore;
+        private readonly IConfiguration _configuration;
 
-        public MemberService(IMapper mapper, IMemberRepository memberRepository)
+        public MemberService(IMapper mapper, IMemberRepository memberRepository, IAttachmentRepository attachmentRepository,
+            IConfiguration configuration, IFileStore fileStore)
         {
             _mapper = mapper;
             _memberRepository = memberRepository;
+            _attachmentRepository = attachmentRepository;
+            _configuration = configuration;
+            _fileStore = fileStore;
         }
 
         public MemberResponse GetMember(int id)
@@ -74,9 +83,26 @@ namespace Service
             _memberRepository.Delete(_memberRepository.GetById(id));
         }
 
-        public Stream GetAttachmentFile(int id)
+        public Stream GetAttachmentFile(int attachmentId)
         {
-            throw new NotImplementedException();
+            string attachmentPath = _configuration["LocalFileStore:Path"];
+            Attachment attachment = _attachmentRepository.GetById(attachmentId);
+            try
+            {
+                return _fileStore.ReadFile(Path.Combine(attachmentPath, attachment.FileGUID));
+            }
+            catch(Exception ex)
+            {
+                throw new FileNotFoundException(ex.Message);
+            }
+        }
+
+        public void VerifyMember(int memberId, bool isVerify)
+        {
+            Members members = _memberRepository.GetById(memberId);
+            members.IsVerified = isVerify;
+            members.VerificationDate = DateTime.Now;
+            _memberRepository.Update(members);
         }
     }
 }
