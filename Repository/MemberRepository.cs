@@ -1,5 +1,6 @@
 ﻿using Core.Common;
 using Core.Repository;
+using Core.RequestModels;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,11 @@ namespace Repository
         public MemberRepository(MCLDBContext context, IUserResolverService user) : base(context, user)
         {
             _context = context;
+        }
+
+        public Page<Members> Search(MemberSearchRequestModel searchModel, int skip, int take)
+        {
+            
         }
     }
 }

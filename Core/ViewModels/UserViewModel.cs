@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Core.ViewModel
+namespace Core.ViewModels
 {
     public class UserViewModel
     {

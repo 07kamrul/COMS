@@ -29,5 +29,7 @@ namespace Model
         public bool IsVerified { get; set; }
         public int VerifiedBy { get; set; }
         public DateTime? VerificationDate { get; set; }
+        public List<Attachment> Attachments { get; set; }
+
     }
 }
