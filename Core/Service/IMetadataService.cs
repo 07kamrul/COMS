@@ -1,4 +1,4 @@
-﻿using Core.ViewModel;
+﻿using Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,7 @@ namespace Core.Service
 {
     public interface IMetadataService
     {
+        List<AttachmentTypeResponse> GetAttachmentTypes();
         List<AmountResponse> GetAmounts();
         AmountResponse GetAmount(int id);
         List<DepositResponse> GetDeposits();
