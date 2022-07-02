@@ -4,7 +4,7 @@ using Core.FileStore;
 using Core.Repository;
 using Core.RequestModels;
 using Core.Service;
-using Core.ViewModel;
+using Core.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Model;
 using System;

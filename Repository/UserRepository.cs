@@ -1,6 +1,6 @@
 ﻿using Core.Common;
 using Core.Repository;
-using Core.ViewModel;
+using Core.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Model;
 using System;

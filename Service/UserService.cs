@@ -46,8 +46,7 @@ namespace Service
             || (x.Email == userSearchText
             || x.Phone == userSearchText
             || x.FirstName.Contains(userSearchText)
-            || x.LastName.Contains(userSearchText)))
-            .Include(x => x.Branch);
+            || x.LastName.Contains(userSearchText)));
 
             return new Page<UserResponse>
             {

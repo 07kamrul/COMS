@@ -1,5 +1,5 @@
 ﻿using Core.RequestModels;
-using Core.ViewModel;
+using Core.ViewModels;
 using Model;
 using System.Collections.Generic;
 using System.IO;
