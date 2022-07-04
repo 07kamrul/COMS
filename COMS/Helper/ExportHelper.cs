@@ -4,6 +4,7 @@ using OfficeOpenXml.Style;
 using System.Collections.Generic;
 using System.IO;
 using System.Drawing;
+using RandomSolutions;
 
 namespace COMS.Helper
 {
@@ -16,7 +17,7 @@ namespace COMS.Helper
             _response = response;
         }
 
-/*        public void ExportToPdf(List<T> exportData, string header)
+        public void ExportToPdf(List<T> exportData, string header)
         {
             byte[] bytes = exportData.ToPdf(
                 scheme =>
@@ -32,7 +33,7 @@ namespace COMS.Helper
             _response.Headers.Add("content-diposition", "attachment;filename=Export.pdf");
             _response.ContentType = "application/pdf";
             _response.Body.WriteAsync(bytes, 0, bytes.Length);
-        }*/
+        }
 
         public void ExportToExcel(List<T> exportData, string header)
         {
