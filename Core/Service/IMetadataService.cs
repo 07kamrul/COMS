@@ -16,6 +16,7 @@ namespace Core.Service
         DepositResponse GetDeposit(int id);
         List<MemberResponse> GetMembers();
         MemberResponse GetMember(int id);
-
+        List<DepositResponse> GetDepositsByMemberId(int memberId);
+        List<AmountResponse> GetAmountsByMemberId(int memberId);
     }
 }

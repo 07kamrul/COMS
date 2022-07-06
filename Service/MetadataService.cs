@@ -46,6 +46,11 @@ namespace Service
         {
             return _mapper.Map<AmountResponse>(_amountRepository.GetById(id));
         }
+        
+        public List<AmountResponse> GetAmountsByMemberId(int memberId)
+        {
+            return _mapper.Map<List<AmountResponse>>(_amountRepository.GetAll().Where(x => x.MemberId == memberId).ToList());
+        }
 
         public List<AmountResponse> GetAmounts()
         {
@@ -60,6 +65,10 @@ namespace Service
         public List<DepositResponse> GetDeposits()
         {
             return _mapper.Map<List<DepositResponse>>(_depositRepository.GetAll().ToList());
+        }
+        public List<DepositResponse> GetDepositsByMemberId(int memberId)
+        {
+            return _mapper.Map<List<DepositResponse>>(_depositRepository.GetAll().Where(x => x.MemberId == memberId).ToList());
         }
 
         public MemberResponse GetMember(int id)
