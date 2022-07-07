@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using Core.RequestModels;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace Core.Repository
 {
     public interface IAmountRepository : IBaseRepository<Amounts>
     {
+        Page<Amounts> Search(AmountSearchRequestModel amountSearchRequestModel, int skip, int take);
     }
 }

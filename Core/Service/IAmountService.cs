@@ -17,5 +17,6 @@ namespace Core.Service
         void UpdateAmount(AmountRequestModel amountRequestModel);
         Stream GetAttachmentFile(int id);
         void VerifyAmount(int amountId, bool isVerify);
+        Page<AmountResponse> Search(AmountSearchRequestModel amountSearchRequestModel, int skip, int take);
     }
 }

@@ -103,5 +103,15 @@ namespace Service
             amounts.VerificationDate = DateTime.Now;
             _amountRepository.Update(amounts);
         }
+
+        public Page<AmountResponse> Search(AmountSearchRequestModel amountSearchRequestModel, int skip, int take)
+        {
+            Page<Amounts> amounts = _amountRepository.Search(amountSearchRequestModel, skip, take);
+            return new Page<AmountResponse>
+            {
+                Data = _mapper.Map<List<AmountResponse>>(amounts.Data),
+                Total = amounts.Total
+            };
+        }
     }
 }
