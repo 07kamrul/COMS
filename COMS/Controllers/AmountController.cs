@@ -34,7 +34,7 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPost]
-        public ActionResult Post([FromBody] AmountRequestModel amountRequestModel)
+        public ActionResult SaveAmount([FromBody] AmountRequestModel amountRequestModel)
         {
             try
             {
