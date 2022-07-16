@@ -102,7 +102,7 @@ namespace COMS.Controllers
             catch(Exception ex)
             {
                 _logger.Error(ex.Message);
-                return Problem(ex.Message, null, (int)HttpStatusCode.InternalServerError);
+                return Problem(ex.Message, null, (int)HttpStatusCode.InternalServerError);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
             }
         }
     }
