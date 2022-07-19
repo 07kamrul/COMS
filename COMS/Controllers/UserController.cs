@@ -82,7 +82,7 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
-        [HttpPut]
+        [HttpPut("UpdateUser")]
         public ActionResult UpdateUser([FromBody] UserRequestModel userRequestModel)
         {
             _logger.Information($"Updating User: {userRequestModel.Email}");
@@ -117,7 +117,7 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Admin)]
-        [HttpDelete]
+        [HttpDelete("DeleteUser")]
         public void DeleteUser(int id)
         {
             _userService.DeleteUser(id);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Repository
 {
-    public interface IAttachmentTypeRepository : IBaseRepository<AttachmentType>
+    public interface IAttachmentTypeRepository : IBaseRepository<AttachmentTypes>
     {
     }
 }

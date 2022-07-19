@@ -86,7 +86,7 @@ namespace Service
         public Stream GetAttachmentFile(int id)
         {
             string attachmentPath = _configuration["LocalFileStore:Path"];
-            Attachment attachment = _attachmentRepository.GetById(id);
+            Attachments attachment = _attachmentRepository.GetById(id);
             try
             {
                 return _fileStore.ReadFile(Path.Combine(attachmentPath, attachment.FileGUID));

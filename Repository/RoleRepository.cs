@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class RoleRepository : BaseRepository<Role>, IRoleRepository
+    public class RoleRepository : BaseRepository<Roles>, IRoleRepository
     {
         public RoleRepository(MCLDBContext context, IUserResolverService user) : base(context, user)
         {

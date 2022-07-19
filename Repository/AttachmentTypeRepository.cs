@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class AttachmentTypeRepository : BaseRepository<AttachmentType>, IAttachmentTypeRepository
+    public class AttachmentTypeRepository : BaseRepository<AttachmentTypes>, IAttachmentTypeRepository
     {
         public AttachmentTypeRepository(MCLDBContext context, IUserResolverService user) : base(context, user)
         {

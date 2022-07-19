@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class AttachmentRepository : BaseRepository<Attachment>, IAttachmentRepository
+    public class AttachmentRepository : BaseRepository<Attachments>, IAttachmentRepository
     {
         MCLDBContext _context;
         public AttachmentRepository(MCLDBContext context, IUserResolverService user) : base(context, user)

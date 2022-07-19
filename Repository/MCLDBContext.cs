@@ -12,26 +12,26 @@ namespace Repository
 {
     public class MCLDBContext : DbContext
     {
-        public MCLDBContext(DbContextOptions options) :base(options)
+        public MCLDBContext(DbContextOptions<MCLDBContext> options) :base(options)
         {
 
         }
 
-        public virtual DbSet<Attachment> Attachment { get; set; }
-        public virtual DbSet<AttachmentType> AttachmentType { get; set; }
-        public virtual DbSet<AuditLog> AuditLogs { get; set; }
+        public virtual DbSet<Attachments> Attachment { get; set; }
+        public virtual DbSet<AttachmentTypes> AttachmentType { get; set; }
+        public virtual DbSet<AuditLogs> AuditLogs { get; set; }
         public virtual DbSet<Amounts> Amounts { get; set; }
         public virtual DbSet<Deposites> Deposites { get; set; }
         public virtual DbSet<Members> Members { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<RoleUser> RoleUser { get; set; }
-        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
         
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasMany(u => u.Roles).WithMany(x => x.Users).UsingEntity<RoleUser>(
+            modelBuilder.Entity<Users>().HasMany(u => u.Roles).WithMany(x => x.Users).UsingEntity<RoleUser>(
                 x => x.HasOne(xs => xs.Role).WithMany(),
                 x => x.HasOne(xs => xs.User).WithMany()
                 ).HasKey( x => new {x.UserId, x.RoleId});
@@ -62,7 +62,7 @@ namespace Repository
             try
             {
                 ChangeTracker.DetectChanges();
-                IList<AuditLog> auditLogChanges = new List<AuditLog>();
+                IList<AuditLogs> auditLogChanges = new List<AuditLogs>();
                 var modifiedEntities = ChangeTracker.Entries().Where( p => p.State == EntityState.Modified || p.State == EntityState.Detached || p.State == EntityState.Detached).ToList();
 
                 foreach(var change in modifiedEntities)
@@ -74,7 +74,7 @@ namespace Repository
 
                     if (change.State == EntityState.Added)
                     {
-                        var changeLoged = new AuditLog
+                        var changeLoged = new AuditLogs
                         {
                             ColumnName = "All",
                             RecordID = primaryKeyValue.ToString(),
@@ -112,7 +112,7 @@ namespace Repository
 
                                     if(originalValue.ToString() != currentValue.ToString() || change.State == EntityState.Added || change.State == EntityState.Deleted)
                                     {
-                                        var changeLoged = new AuditLog
+                                        var changeLoged = new AuditLogs
                                         {
                                             ColumnName = prop.Name,
                                             RecordID = primaryKeyValue.ToString(),

@@ -40,6 +40,9 @@ namespace COMS
             services.AddScoped<MCLDBContext>();
             services.AddScoped<ErrorDbContext>();
             services.AddTransient<PopulateClaimsMiddleware>();
+
+            services.AddScoped<IUserResolverService, UserResolverService>();
+
         }
     }
 }

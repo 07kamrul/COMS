@@ -43,7 +43,7 @@ namespace Service
         public Stream GetAttachmentFile(int attachmentId)
         {
             string attachmentPath = _configuration["LocalFileStore:Path"];
-            Attachment attachment = _attachmentRepository.GetById(attachmentId);
+            Attachments attachment = _attachmentRepository.GetById(attachmentId);
             try
             {
                 return _fileStore.ReadFile(Path.Combine(attachmentPath, attachment.FileGUID));
@@ -70,7 +70,7 @@ namespace Service
             };
             _fileStore.WriteFile(fileInfo, attachmentRequestModel.File.OpenReadStream());
 
-            Attachment attachment = _mapper.Map<Attachment>(attachmentRequestModel);
+            Attachments attachment = _mapper.Map<Attachments>(attachmentRequestModel);
             attachment.FileGUID = fileGUID;
 
             return _mapper.Map<AttachmentResponse>(_attachmentRepository.Add(attachment));
@@ -78,7 +78,7 @@ namespace Service
         public void DeleteAttachment(int attachmentId)
         {
             string attachmentPath = _configuration["LoaclFileStore:Path"];
-            Attachment attachment = _attachmentRepository.GetById(attachmentId);
+            Attachments attachment = _attachmentRepository.GetById(attachmentId);
             _attachmentRepository.Delete(attachment);
             IFileInfo fileInfo = new LocalFileInfo
             {

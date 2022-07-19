@@ -30,7 +30,7 @@ namespace Service
             _userRepository.Delete(_userRepository.GetById(id));
         }
 
-        public User GetbyEmail(string email)
+        public Users GetbyEmail(string email)
         {
             return _userRepository.GetUserByEmail(email);
         }
@@ -62,7 +62,7 @@ namespace Service
 
         public UserResponse SaveUser(UserRequestModel user)
         {
-            User saveUser = _userRepository.Add(_mapper.Map<User>(user));
+            Users saveUser = _userRepository.Add(_mapper.Map<Users>(user));
             return _mapper.Map<UserResponse>(saveUser);
         }
 
@@ -73,13 +73,13 @@ namespace Service
 
         public void UpdateUser(UserRequestModel user)
         {
-            User saveUser = _userRepository.GetById(user.Id);
+            Users saveUser = _userRepository.GetById(user.Id);
             saveUser.FirstName = user.FirstName;
             saveUser.LastName = user.LastName;
             saveUser.Email = user.Email;
             saveUser.Phone = user.Phone;
             saveUser.Password = string.IsNullOrEmpty(user.Password) ? saveUser.Password : user.Password;
-            saveUser.Roles = _mapper.Map<List<Role>>(user.Roles);
+            saveUser.Roles = _mapper.Map<List<Roles>>(user.Roles);
             _userRepository.Update(saveUser);
         }
     }

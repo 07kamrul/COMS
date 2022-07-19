@@ -25,13 +25,10 @@
     "bootstrap": "^4.6.1",
     "core-js": "^3.20.2",
     "jquery": "^3.6.0",
-    "node-sass": "^5.0.0",
     "oidc-client": "~1.11.5",
     "popper.js": "^1.16.1",
-    "protractor": "~5.4.2",
     "rxjs": "^6.6.3",
-    "ts-node": "~8.4.1",
-    "tslint": "~5.20.1"
+    "zone.js": "^0.11.6"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.29",

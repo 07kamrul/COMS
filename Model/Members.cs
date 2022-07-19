@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Model
 {
+    [Table("Members")]
     public class Members : BaseEntity
     {
         public int Code { get; set; }
@@ -29,7 +31,7 @@ namespace Model
         public bool IsVerified { get; set; }
         public int VerifiedBy { get; set; }
         public DateTime? VerificationDate { get; set; }
-        public List<Attachment> Attachments { get; set; }
+        public List<Attachments> Attachments { get; set; }
 
     }
 }

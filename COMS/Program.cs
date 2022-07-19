@@ -14,8 +14,10 @@ namespace COMS
         {
             try
             {
-                using IHost host = CreateHostBuilder(args).Build();
-                host.Run();
+                using (IHost host = CreateHostBuilder(args).Build())
+                {
+                    host.Run();
+                }
             }
             catch(Exception ex)
             {
@@ -46,13 +48,14 @@ namespace COMS
                     .ConfigureAppConfiguration(config =>
                     {
                         config.AddJsonFile("appsettings.Development.json", optional: true);
+
                     })
                     .UseSerilog((hostingContext, loggerConfiguration) =>
                     {
                         loggerConfiguration
                         .ReadFrom.Configuration(hostingContext.Configuration)
                         .Enrich.FromLogContext()
-                        .Enrich.WithProperty("ApplicationName", typeof(Program).Assembly.GetName().Name)
+                        //.Enrich.WithProperty("ApplicationName", typeof(Program).Assembly.GetName().Name)
                         .Enrich.WithProperty("Environment", hostingContext.HostingEnvironment);
 #if DEBUG
                         loggerConfiguration.Enrich.WithProperty("DebuggerAttached", Debugger.IsAttached);

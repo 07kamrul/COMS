@@ -12,7 +12,7 @@ using static Core.Common.Enums;
 
 namespace COMS.Controllers
 {
-    [Route("api/[controller")]
+    [Route("api/[controller]")]
     [Authorize]
     public class AttachmentController : Controller
     {

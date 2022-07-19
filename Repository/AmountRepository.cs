@@ -39,7 +39,6 @@ namespace Repository
                     .Include(x => x.Members).ThenInclude(x => x.Name)
                     .Include(x => x.Amount)
                     .Include(x => x.AmountDate)
-                    .Include(x => x.Deposites).ThenInclude(x => x.DepositeDate)
                     .Include(x => x.IsVerified).ToList(),
                 Total = query.Count()
             };

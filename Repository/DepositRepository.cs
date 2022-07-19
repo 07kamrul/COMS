@@ -27,7 +27,7 @@ namespace Repository
 
             query = query.Where(x => (searchModel.MemberId == 0 || (x.Members.Email.Length > 0 && x.Members.Id == searchModel.MemberId))
                 && (string.IsNullOrEmpty(searchModel.MemberName) || x.Members.Name.Contains(searchModel.MemberName))
-                && (searchModel.Amount == 0 || x.Amounts.Amount == searchModel.Amount)
+                && (searchModel.Amount == 0 )
                 && (searchModel.DepositeDate == null || x.DepositeDate == searchModel.DepositeDate)
                 && x.IsActive
                 && x.IsVerified
@@ -37,8 +37,6 @@ namespace Repository
             {
                 Data = query.OrderBy(a => a.Id).Skip(skip).Take(take)
                     .Include(x => x.Members).ThenInclude(x => x.Email)
-                    .Include(x => x.Amounts).ThenInclude(x => x.Amount)
-                    .Include(x => x.Amounts).ThenInclude(x => x.AmountDate)
                     .Include(x => x.Attachments).ThenInclude(x => x.AttachmentType)
                     .Include(x => x.DepositeDate)
                     .Include(x => x.Members).ThenInclude(x => x.IsActive).ToList(),
