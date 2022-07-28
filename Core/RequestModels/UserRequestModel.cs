@@ -15,6 +15,7 @@ namespace Core.RequestModels
         public string LastName { get; set; }
         public string Phone { get; set; }
         public string Password { get; set; }
-        public virtual List<RoleReqquestModel> Roles { get; set; }
+        public int? GroupId { get; set; }
+        public List<RoleReqquestModel> Roles { get; set; }
     }
 }

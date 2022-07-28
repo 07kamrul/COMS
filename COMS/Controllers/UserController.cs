@@ -70,9 +70,9 @@ namespace COMS.Controllers
                 }
 
                 userRequestModel.Password = CryptoService.EncryptText(userRequestModel.Password);
-                var USER = _userService.SaveUser(userRequestModel);
+                var user = _userService.SaveUser(userRequestModel);
                 
-                return User;
+                return user;
             }
             catch (Exception ex)
             {
