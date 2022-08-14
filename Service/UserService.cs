@@ -40,6 +40,19 @@ namespace Service
             return _mapper.Map<List<RoleResponse>>(_roleRepository.GetAll());
         }
 
+        public RoleResponse SaveRole(RoleRequestModel role)
+        {
+            Roles saveRole = _roleRepository.Add(_mapper.Map<Roles>(role));
+            return _mapper.Map<RoleResponse>(saveRole);
+        }
+
+        public void UpdateRole(RoleRequestModel role)
+        {
+            Roles saveRole = _roleRepository.GetById(role.Id);
+            saveRole.Name = role.Name;
+            _roleRepository.Update(saveRole);
+        }
+
         public Page<UserResponse> GetUserList(string userSearchText, int skip, int take)
         {
             var query = _userRepository.GetAll().Where(x => string.IsNullOrEmpty(userSearchText)

@@ -25,7 +25,7 @@ namespace COMS
             CreateMap<Members, MemberSearchRequestModel>().ReverseMap();
 
             CreateMap<Roles, RoleResponse>().ReverseMap();
-            CreateMap<Roles, RoleReqquestModel>().ReverseMap();
+            CreateMap<Roles, RoleRequestModel>().ReverseMap();
 
             CreateMap<Users, UserViewModel>().ReverseMap();
             CreateMap<Users, UserRequestModel>().ReverseMap();

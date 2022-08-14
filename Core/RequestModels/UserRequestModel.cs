@@ -16,6 +16,6 @@ namespace Core.RequestModels
         public string Phone { get; set; }
         public string Password { get; set; }
         public int? GroupId { get; set; }
-        public List<RoleReqquestModel> Roles { get; set; }
+        public List<RoleRequestModel> Roles { get; set; }
     }
 }

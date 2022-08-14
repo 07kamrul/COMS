@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.RequestModels
 {
-    public class RoleReqquestModel
+    public class RoleRequestModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

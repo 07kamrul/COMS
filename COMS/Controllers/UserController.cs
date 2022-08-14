@@ -95,7 +95,7 @@ namespace COMS.Controllers
 
                 userRequestModel.Password = string.IsNullOrEmpty(userRequestModel.Password) ? null : CryptoService.EncryptText(userRequestModel.Password);
                 _userService.UpdateUser(userRequestModel);
-                
+
                 return Ok();
             }
             catch(Exception ex)
@@ -108,12 +108,61 @@ namespace COMS.Controllers
                 _logger.Information($"Successfully updated user: {userRequestModel.Email}");
             }
         }
-
+        
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("Roles")]
+        [HttpGet("GetRoles")]
         public List<RoleResponse> GetRoles()
         {
             return _userService.GetRoles();
+        }
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpPost("SaveRole")]
+        public RoleResponse SaveRole([FromBody] RoleRequestModel roleRequestModel)
+        {
+            _logger.Information("Role save started");
+            try
+            {
+                if (roleRequestModel.Name == null)
+                {
+                    throw new BadHttpRequestException("This role name is incorrect");
+                }
+                var role = _userService.SaveRole(roleRequestModel);
+
+                return role;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpPut("UpdateRole")]
+        public ActionResult UpdateRole([FromBody] RoleRequestModel roleRequestModel)
+        {
+            _logger.Information($"Updating User: {roleRequestModel.Name}");
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    throw new BadHttpRequestException("invalid request");
+                }
+
+                _userService.UpdateRole(roleRequestModel);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+            finally
+            {
+                _logger.Information($"Successfully updated user: {roleRequestModel.Name}");
+            }
         }
 
         [ClaimRequirement(PermissionType.Admin)]
@@ -153,7 +202,6 @@ namespace COMS.Controllers
                 _logger.Error(ex.Message);
                 throw;
             }
-
         }
     }
 }

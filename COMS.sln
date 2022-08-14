@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMS", "COMS\COMS.csproj", "{33318F54-66AB-459E-B100-B62947F888C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COMS", "COMS\COMS.csproj", "{33318F54-66AB-459E-B100-B62947F888C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{22C93295-E9E0-45AD-8C73-126E82B74C0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{22C93295-E9E0-45AD-8C73-126E82B74C0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{5034FF2F-D773-44EC-B934-30DDEA9316E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logger", "Logger\Logger.csproj", "{5034FF2F-D773-44EC-B934-30DDEA9316E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{C18583B2-8E2A-4E88-80BB-2C46DC84426E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{C18583B2-8E2A-4E88-80BB-2C46DC84426E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{F8604D56-4877-49C2-BFD4-E244A7E38BB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{F8604D56-4877-49C2-BFD4-E244A7E38BB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{EE496904-0C15-4615-944A-CF73F5EA01C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{EE496904-0C15-4615-944A-CF73F5EA01C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{3CFD48CE-E525-4C8B-9E59-D38D788259C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

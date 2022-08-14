@@ -19,6 +19,7 @@ namespace Core.Service
         Page<UserResponse> GetUserList(string userSearchText, int skip, int take);
         void DeleteUser(int id);
         List<RoleResponse> GetRoles();
-
+        RoleResponse SaveRole(RoleRequestModel role);
+        void UpdateRole(RoleRequestModel role);
     }
 }
