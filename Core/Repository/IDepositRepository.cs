@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Core.Repository
 {
-    public interface IDepositRepository : IBaseRepository<Deposites>
+    public interface IDepositRepository : IBaseRepository<Deposite>
     {
-        Page<Deposites> Search(DepositSearchRequestModel searchModel, int skip, int take);
+        Page<Deposite> Search(DepositSearchRequestModel searchModel, int skip, int take);
 
     }
 }

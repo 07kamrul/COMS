@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    [Table("AttachmentTypes")]
-
-    public class AttachmentTypes : BaseEntity
+    [Table("Roles")]
+    public class Role : BaseEntity
     {
-        public string Title { get; set; }
+        public string Name { get; set; }
+        public ICollection<User> Users { get; set; }
     }
 }

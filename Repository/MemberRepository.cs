@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class MemberRepository : BaseRepository<Members>, IMemberRepository
+    public class MemberRepository : BaseRepository<Member>, IMemberRepository
     {
         MCLDBContext _context;
         public MemberRepository(MCLDBContext context, IUserResolverService user) : base(context, user)
@@ -24,10 +24,10 @@ namespace Repository
             return _context.Members.AsNoTracking().Where(x => x.Email.ToLower() == email.ToLower() || x.Code == code || x.Phone == phone || x.NID == nid).Count() > 0;
         }
 
-        public Page<Members> Search(MemberSearchRequestModel searchModel, int skip, int take)
+        public Page<Member> Search(MemberSearchRequestModel searchModel, int skip, int take)
         {
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            IQueryable<Members> query = _context.Set<Members>();
+            IQueryable<Member> query = _context.Set<Member>();
 
             query = query.Where(x => (searchModel.MemberId == 0 || (x.Email.Length > 0 && x.Id == searchModel.MemberId))
                 && (string.IsNullOrEmpty(searchModel.MemberName) || x.Name.Contains(searchModel.MemberName))
@@ -39,7 +39,7 @@ namespace Repository
                 && x.IsVerified
             );
 
-            return new Page<Members>
+            return new Page<Member>
             {
                 Data = query.OrderBy(a => a.Id).Skip(skip).Take(take)
                     .Include(x => x.Attachments).ThenInclude(x => x.AttachmentType)

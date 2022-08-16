@@ -49,8 +49,8 @@ namespace Service
 
         public DepositResponse SaveDeposit(DepositRequestModel depositRequestModel)
         {
-            Deposites existingDeposit = _depositRepository.FindBy(x => x.MemberId == depositRequestModel.MemberId && x.DepositeDate == depositRequestModel.DepositeDate && x.IsActive).FirstOrDefault();
-            Deposites deposit = _mapper.Map<Deposites>(depositRequestModel);
+            Deposite existingDeposit = _depositRepository.FindBy(x => x.MemberId == depositRequestModel.MemberId && x.DepositeDate == depositRequestModel.DepositeDate && x.IsActive).FirstOrDefault();
+            Deposite deposit = _mapper.Map<Deposite>(depositRequestModel);
             deposit.MemberId = depositRequestModel.MemberId;
             deposit.DepositeDate = depositRequestModel.DepositeDate;
             deposit.IsActive = true;
@@ -66,7 +66,7 @@ namespace Service
 
         public Page<DepositResponse> Search(DepositSearchRequestModel searchModel, int skip, int take)
         {
-            Page<Deposites> deposites = _depositRepository.Search(searchModel, skip, take);
+            Page<Deposite> deposites = _depositRepository.Search(searchModel, skip, take);
             return new Page<DepositResponse>
             {
                 Data = _mapper.Map<List<DepositResponse>>(deposites.Data),
@@ -76,7 +76,7 @@ namespace Service
 
         public void UpdateDeposit(DepositRequestModel depositRequestModel)
         {
-            _depositRepository.Update(_mapper.Map<Deposites>(depositRequestModel));
+            _depositRepository.Update(_mapper.Map<Deposite>(depositRequestModel));
         }
         public void DeleteDeposit(int id)
         {
@@ -86,7 +86,7 @@ namespace Service
         public Stream GetAttachmentFile(int id)
         {
             string attachmentPath = _configuration["LocalFileStore:Path"];
-            Attachments attachment = _attachmentRepository.GetById(id);
+            Attachment attachment = _attachmentRepository.GetById(id);
             try
             {
                 return _fileStore.ReadFile(Path.Combine(attachmentPath, attachment.FileGUID));
@@ -99,7 +99,7 @@ namespace Service
 
         public void VerifyDeposit(int depositId, bool isVerify)
         {
-            Deposites deposites = _depositRepository.GetById(depositId);
+            Deposite deposites = _depositRepository.GetById(depositId);
             deposites.IsVerified = isVerify;
             deposites.VerificationDate = DateTime.Now;
             _depositRepository.Update(deposites);

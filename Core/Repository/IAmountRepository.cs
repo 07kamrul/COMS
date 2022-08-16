@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Core.Repository
 {
-    public interface IAmountRepository : IBaseRepository<Amounts>
+    public interface IAmountRepository : IBaseRepository<Amount>
     {
-        Page<Amounts> Search(AmountSearchRequestModel amountSearchRequestModel, int skip, int take);
+        Page<Amount> Search(AmountSearchRequestModel amountSearchRequestModel, int skip, int take);
     }
 }

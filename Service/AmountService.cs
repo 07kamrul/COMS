@@ -54,9 +54,9 @@ namespace Service
 
         public AmountResponse SaveAmount(AmountRequestModel amountRequestModel)
         {
-            Amounts existingAmounts = _amountRepository.FindBy(x => x.MemberId == amountRequestModel.MemberId && x.DipositeId == amountRequestModel.DipositeId).FirstOrDefault();
+            Amount existingAmounts = _amountRepository.FindBy(x => x.MemberId == amountRequestModel.MemberId && x.DipositeId == amountRequestModel.DipositeId).FirstOrDefault();
 
-            Amounts amounts = _mapper.Map<Amounts>(amountRequestModel);
+            Amount amounts = _mapper.Map<Amount>(amountRequestModel);
             amounts.MemberId = amountRequestModel.MemberId;
             amounts.DipositeId = amountRequestModel.DipositeId;
             amounts.IsActive = true;
@@ -73,7 +73,7 @@ namespace Service
 
         public void UpdateAmount(AmountRequestModel amountRequestModel)
         {
-            _amountRepository.Update(_mapper.Map<Amounts>(amountRequestModel));
+            _amountRepository.Update(_mapper.Map<Amount>(amountRequestModel));
         }
 
         public void DeleteAmount(int id)
@@ -84,7 +84,7 @@ namespace Service
         public Stream GetAttachmentFile(int id)
         {
             string attachmentPath = _configuration["LocalFileStore:Path"];
-            Attachments attachment = _attachmentRepository.GetById(id);
+            Attachment attachment = _attachmentRepository.GetById(id);
 
             try
             {
@@ -98,7 +98,7 @@ namespace Service
 
         public void VerifyAmount(int amountId, bool isVerify)
         {
-            Amounts amounts = _amountRepository.GetById(amountId);
+            Amount amounts = _amountRepository.GetById(amountId);
             amounts.IsVerified = isVerify;
             amounts.VerificationDate = DateTime.Now;
             _amountRepository.Update(amounts);
@@ -106,7 +106,7 @@ namespace Service
 
         public Page<AmountResponse> Search(AmountSearchRequestModel amountSearchRequestModel, int skip, int take)
         {
-            Page<Amounts> amounts = _amountRepository.Search(amountSearchRequestModel, skip, take);
+            Page<Amount> amounts = _amountRepository.Search(amountSearchRequestModel, skip, take);
             return new Page<AmountResponse>
             {
                 Data = _mapper.Map<List<AmountResponse>>(amounts.Data),

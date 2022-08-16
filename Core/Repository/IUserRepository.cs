@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Core.Repository
 {
-    public interface IUserRepository : IBaseRepository<Users>
+    public interface IUserRepository : IBaseRepository<User>
     {
         bool IsExistingUser(string email);
-        Users GetUserByEmail(string email);
+        User GetUserByEmail(string email);
         void UpdateRefreshToken(int userId, string refreshToken);
     }
 }

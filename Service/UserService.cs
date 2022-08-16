@@ -30,7 +30,7 @@ namespace Service
             _userRepository.Delete(_userRepository.GetById(id));
         }
 
-        public Users GetbyEmail(string email)
+        public User GetbyEmail(string email)
         {
             return _userRepository.GetUserByEmail(email);
         }
@@ -42,13 +42,13 @@ namespace Service
 
         public RoleResponse SaveRole(RoleRequestModel role)
         {
-            Roles saveRole = _roleRepository.Add(_mapper.Map<Roles>(role));
+            Role saveRole = _roleRepository.Add(_mapper.Map<Role>(role));
             return _mapper.Map<RoleResponse>(saveRole);
         }
 
         public void UpdateRole(RoleRequestModel role)
         {
-            Roles saveRole = _roleRepository.GetById(role.Id);
+            Role saveRole = _roleRepository.GetById(role.Id);
             saveRole.Name = role.Name;
             _roleRepository.Update(saveRole);
         }
@@ -75,7 +75,7 @@ namespace Service
 
         public UserResponse SaveUser(UserRequestModel user)
         {
-            Users saveUser = _userRepository.Add(_mapper.Map<Users>(user));
+            User saveUser = _userRepository.Add(_mapper.Map<User>(user));
             return _mapper.Map<UserResponse>(saveUser);
         }
 
@@ -86,13 +86,14 @@ namespace Service
 
         public void UpdateUser(UserRequestModel user)
         {
-            Users saveUser = _userRepository.GetById(user.Id);
+            User saveUser = _userRepository.GetById(user.Id);
             saveUser.FirstName = user.FirstName;
             saveUser.LastName = user.LastName;
             saveUser.Email = user.Email;
             saveUser.Phone = user.Phone;
             saveUser.Password = string.IsNullOrEmpty(user.Password) ? saveUser.Password : user.Password;
-            saveUser.Roles = _mapper.Map<List<Roles>>(user.Roles);
+            saveUser.Roles = _mapper.Map<List<Role>>(user.Roles);
+            
             _userRepository.Update(saveUser);
         }
 

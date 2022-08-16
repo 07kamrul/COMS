@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace Model
 {
     [Table("Amounts")]
-    public class Amounts : BaseEntity
+    public class Amount : BaseEntity
     {
         public int MemberId { get; set; }
-        public virtual Members? Members { get; set; }
-        public int Amount { get; set; }
+        public virtual Member? Member { get; set; }
+        public int Amounts { get; set; }
         public DateTime AmountDate { get; set; }
         public int DipositeId { get; set; }
         //public virtual Deposites Deposites{ get; set; }

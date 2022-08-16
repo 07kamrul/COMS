@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Model
 {
     [Table("Members")]
-    public class Members : BaseEntity
+    public class Member : BaseEntity
     {
         public int Code { get; set; }
         public string Name { get; set; }
@@ -31,7 +31,7 @@ namespace Model
         public bool IsVerified { get; set; }
         public int VerifiedBy { get; set; }
         public DateTime? VerificationDate { get; set; }
-        public List<Attachments> Attachments { get; set; }
+        public List<Attachment> Attachments { get; set; }
 
     }
 }

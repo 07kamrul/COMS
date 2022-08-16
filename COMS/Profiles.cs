@@ -9,27 +9,27 @@ namespace COMS
     {
         public Profiles()
         {
-            CreateMap<Amounts, AmountRequestModel>().ReverseMap();
-            CreateMap<Amounts, AmountResponse>().ReverseMap();
+            CreateMap<Amount, AmountRequestModel>().ReverseMap();
+            CreateMap<Amount, AmountResponse>().ReverseMap();
 
-            CreateMap<Attachments, AttachmentResponse>().ReverseMap();
-            CreateMap<Attachments, AttachmentRequestModel>().ReverseMap();
-            CreateMap<AttachmentTypes, AttachmentTypeResponse>().ReverseMap();
+            CreateMap<Attachment, AttachmentResponse>().ReverseMap();
+            CreateMap<Attachment, AttachmentRequestModel>().ReverseMap();
+            CreateMap<AttachmentType, AttachmentTypeResponse>().ReverseMap();
             
-            CreateMap<Deposites, DepositRequestModel>().ReverseMap();
-            CreateMap<Deposites, DepositResponse>().ReverseMap();
-            CreateMap<Deposites, DepositSearchRequestModel>().ReverseMap();
+            CreateMap<Deposite, DepositRequestModel>().ReverseMap();
+            CreateMap<Deposite, DepositResponse>().ReverseMap();
+            CreateMap<Deposite, DepositSearchRequestModel>().ReverseMap();
             
-            CreateMap<Members, MemberRequestModel>().ReverseMap();
-            CreateMap<Members, MemberResponse>().ReverseMap();
-            CreateMap<Members, MemberSearchRequestModel>().ReverseMap();
+            CreateMap<Member, MemberRequestModel>().ReverseMap();
+            CreateMap<Member, MemberResponse>().ReverseMap();
+            CreateMap<Member, MemberSearchRequestModel>().ReverseMap();
 
-            CreateMap<Roles, RoleResponse>().ReverseMap();
-            CreateMap<Roles, RoleRequestModel>().ReverseMap();
+            CreateMap<Role, RoleResponse>().ReverseMap();
+            CreateMap<Role, RoleRequestModel>().ReverseMap();
 
-            CreateMap<Users, UserViewModel>().ReverseMap();
-            CreateMap<Users, UserRequestModel>().ReverseMap();
-            CreateMap<Users, UserResponse>().ReverseMap();
+            CreateMap<User, UserViewModel>().ReverseMap();
+            CreateMap<User, UserRequestModel>().ReverseMap();
+            CreateMap<User, UserResponse>().ReverseMap();
         }
     }
 }

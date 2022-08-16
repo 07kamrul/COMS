@@ -2,7 +2,7 @@
 
 namespace Model
 {
-    public class Users : BaseEntity
+    public class User : BaseEntity
     {
         public string Email { get; set; }
         public int MemberId { get; set; }
@@ -12,6 +12,6 @@ namespace Model
         public string Password { get; set; }
         public int? GroupId { get; set; }
         public string RefreshToken { get; set; }
-        public virtual ICollection<Roles> Roles { get; set; }
+        public virtual ICollection<Role> Roles { get; set; }
     }
 }

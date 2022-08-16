@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class UserRepository : BaseRepository<Users>, IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
         private MCLDBContext _context;
         private IUserResolverService _user;
@@ -22,17 +22,17 @@ namespace Repository
             _user = user;
         }
 
-        public override Users GetById(int id)
+        public override User GetById(int id)
         {
             return _context.Users.AsNoTracking().Include(x => x.Roles).Where(x => x.Id == id).FirstOrDefault();
         }
 
-        public override IQueryable<Users> GetAll()
+        public override IQueryable<User> GetAll()
         {
             return _context.Users.AsNoTracking().Include(x => x.Roles).Where(x => x.IsActive).AsQueryable();
         }
 
-        public Users GetUserByEmail(string email)
+        public User GetUserByEmail(string email)
         {
             return _context.Users.AsNoTracking().Include(x => x.Roles).Where(x => x.Email.ToLower() == email.ToLower() && x.IsActive)?.FirstOrDefault();
         }
@@ -49,14 +49,15 @@ namespace Repository
             base.Update(user);
         }
 
-        public override Users Update(Users entity)
+        public override User Update(User entity)
         {
             if(entity.Roles != null && entity.Roles.Count > 0)
             {
-                List<Roles> roles = entity.Roles.ToList();
+                List<Role> roles = entity.Roles.ToList();
                 var rolesRemove = _context.RoleUser.Where(x => x.UserId == entity.Id);
                 _context.RoleUser.RemoveRange(rolesRemove);
                 _context.SaveChanges(_user.GetUser());
+
                 entity.Roles = roles;
             }
 

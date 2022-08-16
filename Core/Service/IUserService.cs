@@ -12,7 +12,7 @@ namespace Core.Service
     public interface IUserService
     {
         bool IsExistingUser(string email);
-        Users GetbyEmail(string email);
+        User GetbyEmail(string email);
         void UpdateUser(UserRequestModel user);
         UserResponse SaveUser(UserRequestModel user);
         void UpdateRefreshToken(int userId, string refreshToken);

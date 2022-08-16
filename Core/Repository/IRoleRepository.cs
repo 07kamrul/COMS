@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Repository
 {
-    public interface IRoleRepository : IBaseRepository<Roles>
+    public interface IRoleRepository : IBaseRepository<Role>
     {
     }
 }

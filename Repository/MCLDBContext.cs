@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,44 +18,48 @@ namespace Repository
 
         }
 
-        public virtual DbSet<Attachments> Attachment { get; set; }
-        public virtual DbSet<AttachmentTypes> AttachmentType { get; set; }
-        public virtual DbSet<AuditLogs> AuditLogs { get; set; }
-        public virtual DbSet<Amounts> Amounts { get; set; }
-        public virtual DbSet<Deposites> Deposites { get; set; }
-        public virtual DbSet<Members> Members { get; set; }
-        public virtual DbSet<Roles> Roles { get; set; }
+        public virtual DbSet<Attachment> Attachments { get; set; }
+        public virtual DbSet<AttachmentType> AttachmentTypes { get; set; }
+        public virtual DbSet<AuditLog> AuditLogs { get; set; }
+        public virtual DbSet<Amount> Amounts { get; set; }
+        public virtual DbSet<Deposite> Deposites { get; set; }
+        public virtual DbSet<Member> Members { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RoleUser> RoleUser { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
-        
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Users>().HasMany(u => u.Roles).WithMany(x => x.Users).UsingEntity<RoleUser>(
+            modelBuilder.Entity<User>()
+            .HasMany(x => x.Roles)
+            .WithMany(x => x.Users)
+            .UsingEntity<RoleUser>(
                 x => x.HasOne(xs => xs.Role).WithMany(),
-                x => x.HasOne(xs => xs.User).WithMany()
-                ).HasKey( x => new {x.UserId, x.RoleId});
+                x => x.HasOne(xs => xs.User).WithMany())
+            .HasKey(x => new { x.UserId, x.RoleId });
         }
 
         protected virtual long GetPrimaryKeyValue<T>(T entity)
         {
             var test = entity;
             var test2 = test.GetType();
-            var keyName = this.Model.FindEntityType(test2).FindPrimaryKey().Properties.Select(x => x.Name).Single();
+            var keyName = this.Model.FindEntityType(test2).FindPrimaryKey().Properties
+                .Select(x => x.Name).FirstOrDefault();
 
             object obj = entity.GetType().GetProperty(keyName).GetValue(entity, null);
             var result = (obj is int) ? (int)obj : (long)obj;
-            if(result < 0)
-            {
+            if (result < 0)
                 return -1;
-            }
+
             return result;
         }
 
+
         public int SaveChanges(string userId)
         {
-            if(userId == null)
+            if (userId == null)
             {
                 return base.SaveChanges();
             }
@@ -62,25 +67,31 @@ namespace Repository
             try
             {
                 ChangeTracker.DetectChanges();
-                IList<AuditLogs> auditLogChanges = new List<AuditLogs>();
-                var modifiedEntities = ChangeTracker.Entries().Where( p => p.State == EntityState.Modified || p.State == EntityState.Detached || p.State == EntityState.Detached).ToList();
+                IList<AuditLog> auditLogChanges = new List<AuditLog>();
+                var modifiedEntities = ChangeTracker.Entries()
+                    .Where(p => p.State == EntityState.Modified || p.State == EntityState.Added || p.State == EntityState.Deleted || p.State == EntityState.Detached).ToList();
 
-                foreach(var change in modifiedEntities)
+                foreach (var change in modifiedEntities)
                 {
-                    TableAttribute tableAttribute = change.Entity.GetType().GetCustomAttributes(typeof(TableAttribute), false).SingleOrDefault() as TableAttribute;
-                    string tableName = tableAttribute != null ? tableAttribute.Name : change.Entity.GetType().Name;
+
+                    TableAttribute tableAttr = change.Entity.GetType().GetCustomAttributes(typeof(TableAttribute), false).SingleOrDefault() as TableAttribute;
+                    string tableName = tableAttr != null ? tableAttr.Name : change.Entity.GetType().Name;
                     var entityName = change.Entity.GetType().Name;
                     var primaryKeyValue = GetPrimaryKeyValue(change.Entity);
 
                     if (change.State == EntityState.Added)
                     {
-                        var changeLoged = new AuditLogs
+                        var changeLoged = new AuditLog
                         {
                             ColumnName = "All",
                             RecordID = primaryKeyValue.ToString(),
                             EventDateUTC = DateTime.UtcNow,
                             OriginalValue = "",
-                            NewValue = Newtonsoft.Json.JsonConvert.SerializeObject(change.Entity),
+                            NewValue = JsonConvert.SerializeObject(change.Entity, Formatting.Indented,
+                                        new JsonSerializerSettings
+                                        {
+                                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                                        }),
                             UserID = userId,
                             EventType = change.State.ToString().Substring(0, 1),
                             TableName = tableName
@@ -89,30 +100,30 @@ namespace Repository
                     }
                     else
                     {
-                        foreach(var prop in change.Entity.GetType().GetTypeInfo().GetRuntimeProperties())
+                        foreach (var prop in change.Entity.GetType().GetTypeInfo().GetRuntimeProperties())
                         {
-                            if(prop.Name == "ModifiedBy" || prop.Name == "ModifiedDate")
+                            if (prop.Name == "ModifiedBy" || prop.Name == "ModifiedDate")
                             {
                                 continue;
                             }
 
-                            if(!prop.GetGetMethod().IsVirtual && prop.CustomAttributes.Where(x => x.AttributeType.Name == "NotMappedAttribute").Count() == 0)
+                            if (!prop.GetGetMethod().IsVirtual && prop.CustomAttributes.Where(x => x.AttributeType.Name == "NotMappedAttribute").Count() == 0)
                             {
                                 try
                                 {
                                     var currentValue = change.Property(prop.Name).CurrentValue ?? string.Empty;
                                     var originalValue = change.Property(prop.Name).OriginalValue ?? string.Empty;
 
-                                    if(change.Property(prop.Name).CurrentValue != null && change.Property(prop.Name).OriginalValue != null 
-                                        && change.Property(prop.Name).CurrentValue.GetType() == typeof(decimal))
+                                    if (change.Property(prop.Name).CurrentValue != null && change.Property(prop.Name).OriginalValue != null &&
+                                        change.Property(prop.Name).CurrentValue.GetType() == typeof(decimal))
                                     {
                                         currentValue = ((decimal)change.Property(prop.Name).CurrentValue).ToString("0.00");
                                         originalValue = ((decimal)change.Property(prop.Name).OriginalValue).ToString("0.00");
                                     }
 
-                                    if(originalValue.ToString() != currentValue.ToString() || change.State == EntityState.Added || change.State == EntityState.Deleted)
+                                    if (originalValue.ToString() != currentValue.ToString() || change.State == EntityState.Added || change.State == EntityState.Deleted)
                                     {
-                                        var changeLoged = new AuditLogs
+                                        var changeLoged = new AuditLog
                                         {
                                             ColumnName = prop.Name,
                                             RecordID = primaryKeyValue.ToString(),
@@ -126,21 +137,20 @@ namespace Repository
                                         auditLogChanges.Add(changeLoged);
                                     }
                                 }
-                                catch
-                                {
-
-                                }
+                                catch { }
                             }
                         }
                     }
                 }
-                if(auditLogChanges.Count > 0)
+
+                if (auditLogChanges.Count > 0)
                 {
                     AuditLogs.AddRange(auditLogChanges);
                 }
+
                 return base.SaveChanges();
             }
-            catch(Exception ex)
+            catch (Exception e)
             {
                 return 0;
             }

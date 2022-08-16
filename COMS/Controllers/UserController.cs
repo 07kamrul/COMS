@@ -205,7 +205,9 @@ namespace COMS.Controllers
             }
         }
 
-        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+
+        [AllowAnonymous]
+        //[ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("GetUser/{id}")]
         public UserResponse GetUserById(int id)
         {

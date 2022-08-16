@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Model
 {
     [Table("AuditLogs")]
-    public class AuditLogs
+    public class AuditLog
     {
         [Key]
         public long Id { get; set; }

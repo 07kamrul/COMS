@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Core.Repository
 {
-    public interface IMemberRepository : IBaseRepository<Members>
+    public interface IMemberRepository : IBaseRepository<Member>
     {
-        Page<Members> Search(MemberSearchRequestModel searchModel, int skip, int take);
+        Page<Member> Search(MemberSearchRequestModel searchModel, int skip, int take);
         bool IsExistingMember(string email, int code, string phone, long nid);
     }
 }

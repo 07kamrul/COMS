@@ -52,9 +52,9 @@ namespace Service
 
         public MemberResponse SaveMember(MemberRequestModel memberRequestModel)
         {
-            Members existingMember = _memberRepository.FindBy(x => x.Email == memberRequestModel.Email || x.Phone == memberRequestModel.Phone || x.NID == memberRequestModel.NID).FirstOrDefault();
+            Member existingMember = _memberRepository.FindBy(x => x.Email == memberRequestModel.Email || x.Phone == memberRequestModel.Phone || x.NID == memberRequestModel.NID).FirstOrDefault();
 
-            Members member = _mapper.Map<Members>(memberRequestModel);
+            Member member = _mapper.Map<Member>(memberRequestModel);
             member.Email = memberRequestModel.Email;
             member.Phone = memberRequestModel.Phone;
             member.IsActive = true;
@@ -71,7 +71,7 @@ namespace Service
 
         public Page<MemberResponse> Search(MemberSearchRequestModel searchModel, int skip, int take)
         {
-            Page<Members> members = _memberRepository.Search(searchModel, skip, take);
+            Page<Member> members = _memberRepository.Search(searchModel, skip, take);
             return new Page<MemberResponse>
             {
                 Data = _mapper.Map<List<MemberResponse>>(members.Data),
@@ -81,7 +81,7 @@ namespace Service
 
         public void UpdateMember(MemberRequestModel memberRequestModel)
         {
-            _memberRepository.Update(_mapper.Map<Members>(memberRequestModel));
+            _memberRepository.Update(_mapper.Map<Member>(memberRequestModel));
         }
 
         public void DeleteMember(int id)
@@ -92,7 +92,7 @@ namespace Service
         public Stream GetAttachmentFile(int attachmentId)
         {
             string attachmentPath = _configuration["LocalFileStore:Path"];
-            Attachments attachment = _attachmentRepository.GetById(attachmentId);
+            Attachment attachment = _attachmentRepository.GetById(attachmentId);
             try
             {
                 return _fileStore.ReadFile(Path.Combine(attachmentPath, attachment.FileGUID));
@@ -105,7 +105,7 @@ namespace Service
 
         public void VerifyMember(int memberId, bool isVerify)
         {
-            Members members = _memberRepository.GetById(memberId);
+            Member members = _memberRepository.GetById(memberId);
             members.IsVerified = isVerify;
             members.VerificationDate = DateTime.Now;
             _memberRepository.Update(members);

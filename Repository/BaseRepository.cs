@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
+    public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
         private MCLDBContext _Context = null;
         private DbSet<T> _Entities = null;
@@ -22,18 +22,6 @@ namespace Repository
             _Context = context;
             _User = user;
             _Entities = _Context.Set<T>();
-        }
-
-        public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
-        {
-            IQueryable<T> query = _Entities.AsNoTracking().AsQueryable<T>().Where(predicate).Where(x => x.IsActive == true);
-            return query;
-        }
-
-        public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate, int skip, int take)
-        {
-            IQueryable<T> query = _Entities.AsNoTracking().AsQueryable<T>().Where(predicate).Where(x => x.IsActive == true).Skip(skip).Take(take);
-            return query;
         }
 
         public virtual IQueryable<T> GetAll()
@@ -48,10 +36,36 @@ namespace Repository
             return entity;
         }
 
+        public IQueryable<T> FindBy(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
+        {
+            IQueryable<T> query = _Entities
+                .AsNoTracking()
+                .AsQueryable<T>()
+                .Where(predicate)
+                .Where(x => x.IsActive == true);
+            return query;
+        }
+
+        public IQueryable<T> FindBy(System.Linq.Expressions.Expression<Func<T, bool>> predicate, int skip, int take)
+        {
+            IQueryable<T> query = _Entities
+                .AsNoTracking()
+                .AsQueryable<T>()
+                .Where(predicate)
+                .Where(x => x.IsActive == true)
+                .Skip(skip)
+                .Take(take);
+            return query;
+        }
+
         public virtual T Add(T entity)
         {
             _Context.Entry(entity).State = EntityState.Added;
             entity = _Entities.Add(entity).Entity;
+            entity.CreationDate = DateTime.UtcNow;
+            int userId;
+            int.TryParse(_User.GetUser(), out userId);
+            entity.CreatedBy = (userId == 0 ? null : userId);
             _Context.SaveChanges();
             return entity;
         }
@@ -73,12 +87,16 @@ namespace Repository
 
         public virtual T Update(T entity)
         {
-            _Context.Entry(entity).State = EntityState.Modified;
-            entity = _Entities.Update(entity).Entity;
             entity.ModificationDate = DateTime.UtcNow;
             int userId;
             int.TryParse(_User.GetUser(), out userId);
             entity.ModifiedBy = (userId == 0 ? null : userId);
+
+            _Context.Entry(entity).State = EntityState.Modified;
+            _Context.Entry(entity).Property(x => x.CreationDate).IsModified = false;
+            _Context.Entry(entity).Property(x => x.CreatedBy).IsModified = false;
+            // entity = _Context.Update(entity).Entity;
+
             _Context.SaveChanges();
             return entity;
         }
