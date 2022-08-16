@@ -41,12 +41,18 @@ namespace Service
 
         public List<MemberResponse> GetMembers()
         {
-            return _mapper.Map<List<MemberResponse>>(_memberRepository.GetAll());
+            var getMembers = _memberRepository.GetAll();
+            return _mapper.Map<List<MemberResponse>>(getMembers);
+        }
+
+        public bool IsExistingMember(string email, int code, string phone, long nid)
+        {
+            return _memberRepository.IsExistingMember(email, code, phone, nid);
         }
 
         public MemberResponse SaveMember(MemberRequestModel memberRequestModel)
         {
-            Members existingMember = _memberRepository.FindBy(x => x.Email == memberRequestModel.Email || x.Phone == memberRequestModel.Phone).FirstOrDefault();
+            Members existingMember = _memberRepository.FindBy(x => x.Email == memberRequestModel.Email || x.Phone == memberRequestModel.Phone || x.NID == memberRequestModel.NID).FirstOrDefault();
 
             Members member = _mapper.Map<Members>(memberRequestModel);
             member.Email = memberRequestModel.Email;

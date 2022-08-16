@@ -28,7 +28,7 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("Member")]
+        [HttpGet("GetMembers")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public List<MemberResponse> GetMembers()
         {
@@ -36,7 +36,7 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("Member")]
+        [HttpGet("GetMember")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public MemberResponse GetMember(int Id)
         {
@@ -44,21 +44,40 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpPost("Search")]
+        [HttpPost("SearchMember")]
         public Page<MemberResponse> Search([FromBody] MemberSearchRequestModel request, int skip, int pageSize)
         {
             return _memberService.Search(request, skip, pageSize);
         }
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpPost("Member")]
-        public MemberResponse SaveMember([FromBody] MemberRequestModel memberRequestModel)
+        [HttpPost("SaveMember")]
+        public MemberResponse SaveMember([FromBody] MemberRequestModel member)
         {
-            return _memberService.SaveMember(memberRequestModel);
+            _logger.Information("Save member started");
+            try
+            {
+                if (member.Email == null || member.Code == 0 || member.Phone == null || member.NID == 0)
+                {
+                    throw new BadHttpRequestException("This Email or Code or Phone invalid.");
+                }
+
+                if (_memberService.IsExistingMember(member.Email, member.Code, member.Phone, member.NID))
+                {
+                    throw new BadHttpRequestException("This Email or Code or Phone are already in use.");
+                }
+
+                return _memberService.SaveMember(member);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
         }
 
         [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
-        [HttpPut]
+        [HttpPut("UpdateMember")]
         public ActionResult UpdateMember([FromBody] MemberRequestModel memberRequestModel)
         {
             _logger.Information($"Updating member: {memberRequestModel.Name}");
@@ -82,7 +101,7 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Admin)]
-        [HttpDelete("Member/{id}")]
+        [HttpDelete("DeleteMember/{id}")]
         public ActionResult DeleteMember(int id)
         {
             _logger.Information($"Deleting member. id: {id}");

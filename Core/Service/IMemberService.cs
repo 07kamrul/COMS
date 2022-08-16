@@ -20,6 +20,6 @@ namespace Core.Service
         void UpdateMember(MemberRequestModel memberRequestModel);
         Stream GetAttachmentFile(int id);
         void VerifyMember(int memberId, bool isVerify);
-
+        bool IsExistingMember(string email, int code, string phone, long nid);
     }
 }

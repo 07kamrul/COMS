@@ -15,7 +15,7 @@ namespace Core.RequestModels
         public string MotherName { get; set; }
         public DateTime JoiningDate { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public int NID { get; set; }
+        public long NID { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Gender { get; set; }

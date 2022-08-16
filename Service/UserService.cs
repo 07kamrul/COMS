@@ -95,5 +95,11 @@ namespace Service
             saveUser.Roles = _mapper.Map<List<Roles>>(user.Roles);
             _userRepository.Update(saveUser);
         }
+
+        public UserResponse GetUser(int id)
+        {
+            var user = _userRepository.GetById(id);
+            return _mapper.Map<UserResponse>(user);
+        }
     }
 }

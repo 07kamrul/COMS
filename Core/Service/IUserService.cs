@@ -21,5 +21,6 @@ namespace Core.Service
         List<RoleResponse> GetRoles();
         RoleResponse SaveRole(RoleRequestModel role);
         void UpdateRole(RoleRequestModel role);
+        UserResponse GetUser(int id);
     }
 }

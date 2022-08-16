@@ -81,7 +81,8 @@ namespace COMS.Controllers
             }
         }
 
-        [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
+        [AllowAnonymous]
+        //[ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
         [HttpPut("UpdateUser")]
         public ActionResult UpdateUser([FromBody] UserRequestModel userRequestModel)
         {
@@ -189,7 +190,7 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Admin)]
-        [HttpGet("Users")]
+        [HttpGet("GetUserList")]
         public Page<UserResponse> GetUserList(string userSearchText, int skip, int take)
         {
             _logger.Information("Get user list started.");
@@ -201,6 +202,22 @@ namespace COMS.Controllers
             {
                 _logger.Error(ex.Message);
                 throw;
+            }
+        }
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetUser/{id}")]
+        public UserResponse GetUserById(int id)
+        {
+            try
+            {
+                UserResponse user = _mapper.Map<UserResponse>(_userService.GetUser(id));
+                return user;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                return null;
             }
         }
     }
