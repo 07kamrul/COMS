@@ -207,7 +207,7 @@ namespace COMS.Controllers
 
 
         [AllowAnonymous]
-        //[ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("GetUser/{id}")]
         public UserResponse GetUserById(int id)
         {
@@ -220,6 +220,54 @@ namespace COMS.Controllers
             {
                 _logger.Error(ex.Message);
                 return null;
+            }
+        }
+
+        [ClaimRequirement(PermissionType.Admin)]
+        [HttpGet("GetActiveUsers")]
+        public List<UserResponse> GetAllActiveUser()
+        {
+            _logger.Information("Get all active users started.");
+            try
+            {
+                return _userService.GetAllActiveUser();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+        [ClaimRequirement(PermissionType.Admin)]
+        [HttpGet("GetInActiveUsers")]
+        public List<UserResponse> GetInActiveUsers()
+        {
+            _logger.Information("Get all inactive users started.");
+            try
+            {
+                return _userService.GetInActiveUsers();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+        [ClaimRequirement(PermissionType.Admin)]
+        [HttpGet("GetAllUsers")]
+        public List<UserResponse> GetAllUsers()
+        {
+            _logger.Information("Get all users started.");
+            try
+            {
+                return _userService.GetAllUsers();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
             }
         }
     }

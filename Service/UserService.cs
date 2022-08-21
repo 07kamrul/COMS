@@ -102,5 +102,23 @@ namespace Service
             var user = _userRepository.GetById(id);
             return _mapper.Map<UserResponse>(user);
         }
+
+        public List<UserResponse> GetAllActiveUser()
+        {
+            var activeUsers = _userRepository.GetAll().Where(x => x.IsActive);
+            return _mapper.Map<List<UserResponse>>(activeUsers);
+        }
+
+        public List<UserResponse> GetInActiveUsers()
+        {
+            var inActiveUsers = _userRepository.GetAll().Where(x => !x.IsActive);
+            return _mapper.Map<List<UserResponse>>(inActiveUsers);
+        }
+
+        public List<UserResponse> GetAllUsers()
+        {
+            var users = _userRepository.GetAll();
+            return _mapper.Map<List<UserResponse>>(users);
+        }
     }
 }
