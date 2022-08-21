@@ -81,8 +81,8 @@ namespace COMS.Controllers
             }
         }
 
-        [AllowAnonymous]
-        //[ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
+
+        [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
         [HttpPut("UpdateUser")]
         public ActionResult UpdateUser([FromBody] UserRequestModel userRequestModel)
         {
@@ -109,13 +109,24 @@ namespace COMS.Controllers
                 _logger.Information($"Successfully updated user: {userRequestModel.Email}");
             }
         }
+
         
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("GetRoles")]
         public List<RoleResponse> GetRoles()
         {
-            return _userService.GetRoles();
+            _logger.Information("Get all users started.");
+            try
+            {
+                return _userService.GetRoles();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
         }
+
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPost("SaveRole")]
@@ -138,6 +149,7 @@ namespace COMS.Controllers
                 throw;
             }
         }
+
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPut("UpdateRole")]
@@ -166,12 +178,24 @@ namespace COMS.Controllers
             }
         }
 
+
         [ClaimRequirement(PermissionType.Admin)]
         [HttpDelete("DeleteUser")]
         public void DeleteUser(int id)
         {
-            _userService.DeleteUser(id);
+            _logger.Information("Get delete users started.");
+            try
+            {
+                _userService.DeleteUser(id);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
         }
+
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("User")]
@@ -205,8 +229,6 @@ namespace COMS.Controllers
             }
         }
 
-
-        [AllowAnonymous]
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("GetUser/{id}")]
         public UserResponse GetUserById(int id)
