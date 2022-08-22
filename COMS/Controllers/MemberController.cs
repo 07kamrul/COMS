@@ -27,12 +27,39 @@ namespace COMS.Controllers
             _logger = logger;
         }
 
+
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("GetMembers")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public List<MemberResponse> GetMembers()
         {
-            return _memberService.GetMembers();
+            _logger.Information("Get all members started.");
+            try
+            {
+                return _memberService.GetMembers();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetInactiveMembers")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public List<MemberResponse> GetInactiveMembers()
+        {
+            _logger.Information("Get inactive members started.");
+            try
+            {
+                return _memberService.GetInactiveMembers();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
         }
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
@@ -40,15 +67,69 @@ namespace COMS.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         public MemberResponse GetMember(int Id)
         {
-            return _memberService.GetMember(Id);
+            _logger.Information("Get all member started.");
+            try
+            {
+                return _memberService.GetMember(Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+        
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetVerifiedMembers")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public List<MemberResponse> GetVerifiedMembers()
+        {
+            _logger.Information("Get Verified Members started.");
+            try
+            {
+                return _memberService.GetVerifiedMembers();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetRequestVerifyMembers")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public List<MemberResponse> GetRequestVerifyMembers()
+        {
+            _logger.Information("Get Request Verify Members started.");
+            try
+            {
+                return _memberService.GetRequestVerifyMembers();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
         }
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPost("SearchMember")]
         public Page<MemberResponse> Search([FromBody] MemberSearchRequestModel request, int skip, int pageSize)
         {
-            return _memberService.Search(request, skip, pageSize);
+            _logger.Information("Search member started.");
+            try
+            {
+                return _memberService.Search(request, skip, pageSize);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
         }
+
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPost("SaveMember")]

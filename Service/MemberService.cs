@@ -41,7 +41,7 @@ namespace Service
 
         public List<MemberResponse> GetMembers()
         {
-            var getMembers = _memberRepository.GetAll();
+            var getMembers = _memberRepository.GetAll().Where(x => x.IsActive);
             return _mapper.Map<List<MemberResponse>>(getMembers);
         }
 
@@ -109,6 +109,24 @@ namespace Service
             members.IsVerified = isVerify;
             members.VerificationDate = DateTime.Now;
             _memberRepository.Update(members);
+        }
+
+        public List<MemberResponse> GetVerifiedMembers()
+        {
+            var getVerifiedMembers = _memberRepository.GetAll().Where(x => x.IsVerified && x.IsActive);
+            return _mapper.Map<List<MemberResponse>>(getVerifiedMembers);
+        }
+
+        public List<MemberResponse> GetRequestVerifyMembers()
+        {
+            var getRequestVerifyMembers = _memberRepository.GetAll().Where(x => !x.IsVerified && x.IsActive);
+            return _mapper.Map<List<MemberResponse>>(getRequestVerifyMembers);
+        }
+
+        public List<MemberResponse> GetInactiveMembers()
+        {
+            var getInactiveMembers = _memberRepository.GetAll().Where(x => !x.IsActive);
+            return _mapper.Map<List<MemberResponse>>(getInactiveMembers);
         }
     }
 }
