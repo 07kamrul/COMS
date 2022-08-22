@@ -1,0 +1,11 @@
+http://localhost:5001/api/user/signup
+
+{
+  "Email": "kamrul@gmail.com",
+  "MemberId": 1,
+  "FirstName": "Kamrul",
+  "LastName": "Hasan",
+  "Phone": "01758290421",
+  "Password": "kamrul123",
+  "GroupId": "1"
+}

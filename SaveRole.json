@@ -1,0 +1,7 @@
+http: //localhost:5001/api/user/SaveRole
+
+
+{
+  "Id": 1,
+  "Name": "Admin"
+}

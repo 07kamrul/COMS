@@ -1,0 +1,6 @@
+http://localhost:5001/api/auth/login
+
+{
+  "Username": "kamrul@gmail.com",
+  "Password": "kamrul123"
+}
