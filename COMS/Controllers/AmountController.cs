@@ -22,13 +22,11 @@ namespace COMS.Controllers
     public class AmountController : BaseApiController
     {
         private readonly IAmountService _amountService;
-        private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public AmountController(IAmountService amountService, IMapper mapper, ILogger logger)
+        public AmountController(IAmountService amountService, ILogger logger)
         {
             _amountService = amountService;
-            _mapper = mapper;
             _logger = logger;   
         }
 
@@ -68,7 +66,7 @@ namespace COMS.Controllers
 
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetAmountsByMemberId")]
+        [HttpGet("GetAmountsByMemberId/{id}")]
         public List<AmountResponse> GetAmountsByMemberId(int memberId)
         {
             _logger.Information("Get All Amounts by Member started.");
@@ -85,7 +83,7 @@ namespace COMS.Controllers
 
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetAmountByDepositId")]
+        [HttpGet("GetAmountByDepositId/{id}")]
         public AmountResponse GetAmountByDepositId(int depositId)
         {
             _logger.Information("Get All Amounts by Deposite started.");
