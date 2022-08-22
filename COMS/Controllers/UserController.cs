@@ -11,6 +11,7 @@ using Model;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using static Core.Common.Enums;
 
 namespace COMS.Controllers
@@ -164,6 +165,7 @@ namespace COMS.Controllers
                 }
 
                 _userService.UpdateRole(roleRequestModel);
+                _logger.Information("Role successfully updated.");
 
                 return Ok();
             }
@@ -181,18 +183,26 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Admin)]
         [HttpDelete("DeleteUser")]
-        public void DeleteUser(int id)
+        public ActionResult DeleteUser(int id)
         {
             _logger.Information("Get delete users started.");
+
+            if (id == 0)
+            {
+                _logger.Information("Id cannot be zero.");
+                return BadRequest();
+            }
+
             try
             {
+                _logger.Information("Member successfully deleted.");
                 _userService.DeleteUser(id);
-
+                return Ok();
             }
             catch (Exception ex)
             {
                 _logger.Error(ex.Message);
-                throw;
+                return Problem(ex.Message, null, (int)HttpStatusCode.InternalServerError);
             }
         }
 

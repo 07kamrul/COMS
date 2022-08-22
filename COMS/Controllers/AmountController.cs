@@ -32,8 +32,77 @@ namespace COMS.Controllers
             _logger = logger;   
         }
 
+
+        [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
+        [HttpGet("GetAmount/{id}")]
+        public AmountResponse GetAmount(int id)
+        {
+            _logger.Information("Get Amount started.");
+            try
+            {
+                return _amountService.GetAmount(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpPost]
+        [HttpGet("GetAmounts")]
+        public List<AmountResponse> GetAmounts()
+        {
+            _logger.Information("Get All Amounts started.");
+            try
+            {
+                return _amountService.GetAmounts();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetAmountsByMemberId")]
+        public List<AmountResponse> GetAmountsByMemberId(int memberId)
+        {
+            _logger.Information("Get All Amounts by Member started.");
+            try
+            {
+                return _amountService.GetAmountsByMemberId(memberId);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetAmountByDepositId")]
+        public AmountResponse GetAmountByDepositId(int depositId)
+        {
+            _logger.Information("Get All Amounts by Deposite started.");
+            try
+            {
+                return _amountService.GetAmountByDepositId(depositId);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpPost("SaveAmount")]
         public ActionResult SaveAmount([FromBody] AmountRequestModel amountRequestModel)
         {
             try
@@ -58,15 +127,9 @@ namespace COMS.Controllers
             }
         }
 
-        [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
-        [HttpGet("{id}")]
-        public AmountResponse Get(int id)
-        {
-            return _amountService.GetAmount(id);
-        }
 
         [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
-        [HttpPut]
+        [HttpPut("UpdateAmount")]
         public ActionResult UpdateAmount([FromBody] AmountRequestModel amountRequestModel)
         {
             _logger.Information($"Updating member amount: {amountRequestModel.MemberId}");
@@ -93,7 +156,7 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Admin)]
-        [HttpDelete]
+        [HttpDelete("Delete/{id}")]
         public ActionResult Delete(int id)
         {
             _logger.Information($"Deleting amount id : {id}");
