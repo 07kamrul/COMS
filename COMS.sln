@@ -15,36 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Re
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{EE496904-0C15-4615-944A-CF73F5EA01C9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{3CFD48CE-E525-4C8B-9E59-D38D788259C0}"
-	ProjectSection(SolutionItems) = preProject
-		All_Scripts.sql = All_Scripts.sql
-		Amounts.Sql = Amounts.Sql
-		Attachments.sql = Attachments.sql
-		AttachmentTypes.sql = AttachmentTypes.sql
-		AuditLogs.sql = AuditLogs.sql
-		Deposites.sql = Deposites.sql
-		Members.sql = Members.sql
-		Roles.sql = Roles.sql
-		RoleUser.sql = RoleUser.sql
-		Users.sql = Users.sql
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RESTAPIs_Body", "RESTAPIs_Body", "{FFED7D66-8E68-4A74-B176-B6A793DD1FC3}"
-	ProjectSection(SolutionItems) = preProject
-		GetActiveUsers.json = GetActiveUsers.json
-		GetAllUsers.json = GetAllUsers.json
-		GetInActiveUsers.json = GetInActiveUsers.json
-		GetMember.json = GetMember.json
-		GetMembers.json = GetMembers.json
-		GetUser.json = GetUser.json
-		GetUserList.json = GetUserList.json
-		login.json = login.json
-		SaveMember.json = SaveMember.json
-		SaveRole.json = SaveRole.json
-		signup.json = signup.json
-		UpdateUser.json = UpdateUser.json
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
