@@ -40,13 +40,13 @@ namespace Service
             return _mapper.Map<List<RoleResponse>>(_roleRepository.GetAll());
         }
 
-        public RoleResponse SaveRole(RoleRequestModel role)
+        public RoleResponse SaveRole(RoleRequest role)
         {
             Role saveRole = _roleRepository.Add(_mapper.Map<Role>(role));
             return _mapper.Map<RoleResponse>(saveRole);
         }
 
-        public void UpdateRole(RoleRequestModel role)
+        public void UpdateRole(RoleRequest role)
         {
             Role saveRole = _roleRepository.GetById(role.Id);
             saveRole.Name = role.Name;
@@ -73,7 +73,7 @@ namespace Service
             return _userRepository.IsExistingUser(email);
         }
 
-        public UserResponse SaveUser(UserRequestModel user)
+        public UserResponse SaveUser(UserRequest user)
         {
             User saveUser = _userRepository.Add(_mapper.Map<User>(user));
             return _mapper.Map<UserResponse>(saveUser);
@@ -84,7 +84,7 @@ namespace Service
             _userRepository.UpdateRefreshToken(userId, refreshToken);
         }
 
-        public void UpdateUser(UserRequestModel user)
+        public void UpdateUser(UserRequest user)
         {
             User saveUser = _userRepository.GetById(user.Id);
             saveUser.FirstName = user.FirstName;

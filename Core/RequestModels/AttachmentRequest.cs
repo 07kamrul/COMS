@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.RequestModels
 {
-    public class AttachmentRequestModel
+    public class AttachmentRequest
     {
         public IFormFile File { get; set; }
         public int AttachmentTypeId { get; set; }

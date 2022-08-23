@@ -25,7 +25,7 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPost("Attachment")]
-        public ActionResult SaveAttachment([FromForm] AttachmentRequestModel attachmentRequestModel)
+        public ActionResult SaveAttachment([FromForm] AttachmentRequest attachmentRequestModel)
         {
             if (attachmentRequestModel.AttachmentTypeId == 0 || attachmentRequestModel.MemberId == 0 || attachmentRequestModel.File.Length == 0)
             {

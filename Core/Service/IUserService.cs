@@ -13,14 +13,14 @@ namespace Core.Service
     {
         bool IsExistingUser(string email);
         User GetbyEmail(string email);
-        void UpdateUser(UserRequestModel user);
-        UserResponse SaveUser(UserRequestModel user);
+        void UpdateUser(UserRequest user);
+        UserResponse SaveUser(UserRequest user);
         void UpdateRefreshToken(int userId, string refreshToken);
         Page<UserResponse> GetUserList(string userSearchText, int skip, int take);
         void DeleteUser(int id);
         List<RoleResponse> GetRoles();
-        RoleResponse SaveRole(RoleRequestModel role);
-        void UpdateRole(RoleRequestModel role);
+        RoleResponse SaveRole(RoleRequest role);
+        void UpdateRole(RoleRequest role);
         UserResponse GetUser(int id);
         List<UserResponse> GetAllActiveUser();
         List<UserResponse> GetInActiveUsers();

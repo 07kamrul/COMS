@@ -18,6 +18,6 @@ namespace Core.ViewModels
         public string Phone { get; set; }
         public string Password { get; set; }
         public string RefreshToken { get; set; }
-        public List<RoleRequestModel> Roles { get; set; }
+        public List<RoleRequest> Roles { get; set; }
     }
 }

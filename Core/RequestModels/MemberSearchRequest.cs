@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.RequestModels
 {
-    public class MemberSearchRequestModel
+    public class MemberSearchRequest
     {
         public int Code { get; set; }
         public int MemberId { get; set; }

@@ -116,7 +116,7 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPost("SearchMember")]
-        public Page<MemberResponse> Search([FromBody] MemberSearchRequestModel request, int skip, int pageSize)
+        public Page<MemberResponse> Search([FromBody] MemberSearchRequest request, int skip, int pageSize)
         {
             _logger.Information("Search member started.");
             try
@@ -133,7 +133,7 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPost("SaveMember")]
-        public MemberResponse SaveMember([FromBody] MemberRequestModel member)
+        public MemberResponse SaveMember([FromBody] MemberRequest member)
         {
             _logger.Information("Save member started");
             try
@@ -159,7 +159,7 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
         [HttpPut("UpdateMember")]
-        public ActionResult UpdateMember([FromBody] MemberRequestModel memberRequestModel)
+        public ActionResult UpdateMember([FromBody] MemberRequest memberRequestModel)
         {
             _logger.Information($"Updating member: {memberRequestModel.Name}");
             try

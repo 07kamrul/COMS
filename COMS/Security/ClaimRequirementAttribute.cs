@@ -37,7 +37,7 @@ namespace COMS.Security
                     var reader = new StreamReader(context.HttpContext.Request.Body);
                     var content = await reader.ReadToEndAsync();
                     context.HttpContext.Request.Body = new MemoryStream(Encoding.ASCII.GetBytes(content));
-                    var user = JsonConvert.DeserializeObject<UserRequestModel>(content);
+                    var user = JsonConvert.DeserializeObject<UserRequest>(content);
 
                     if(user.Id.ToString() == userId)
                     {

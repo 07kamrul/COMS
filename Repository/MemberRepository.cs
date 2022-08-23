@@ -24,7 +24,7 @@ namespace Repository
             return _context.Members.AsNoTracking().Where(x => x.Email.ToLower() == email.ToLower() || x.Code == code || x.Phone == phone || x.NID == nid).Count() > 0;
         }
 
-        public Page<Member> Search(MemberSearchRequestModel searchModel, int skip, int take)
+        public Page<Member> Search(MemberSearchRequest searchModel, int skip, int take)
         {
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             IQueryable<Member> query = _context.Set<Member>();

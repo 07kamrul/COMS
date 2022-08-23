@@ -41,14 +41,14 @@ namespace COMS.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         [AllowAnonymous]
         [HttpPost("signup")]
-        public dynamic SignUp([FromBody] UserRequestModel userRequestModel)
+        public dynamic SignUp([FromBody] UserRequest userRequestModel)
         {
             return SignUp(userRequestModel, GenerateInvitationCode());
         }
 
         [AllowAnonymous]
         [HttpPost("InvitationSignUp")]
-        private dynamic SignUp(UserRequestModel userRequestModel, int invitationCode)
+        private dynamic SignUp(UserRequest userRequestModel, int invitationCode)
         {
             _logger.Information("User signup started");
             if(GenerateInvitationCode() != invitationCode)
@@ -85,7 +85,7 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
         [HttpPut("UpdateUser")]
-        public ActionResult UpdateUser([FromBody] UserRequestModel userRequestModel)
+        public ActionResult UpdateUser([FromBody] UserRequest userRequestModel)
         {
             _logger.Information($"Updating User: {userRequestModel.Email}");
             try
@@ -131,7 +131,7 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPost("SaveRole")]
-        public RoleResponse SaveRole([FromBody] RoleRequestModel roleRequestModel)
+        public RoleResponse SaveRole([FromBody] RoleRequest roleRequestModel)
         {
             _logger.Information("Role save started");
             try
@@ -154,7 +154,7 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPut("UpdateRole")]
-        public ActionResult UpdateRole([FromBody] RoleRequestModel roleRequestModel)
+        public ActionResult UpdateRole([FromBody] RoleRequest roleRequestModel)
         {
             _logger.Information($"Updating User: {roleRequestModel.Name}");
             try

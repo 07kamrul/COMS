@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.RequestModels
 {
-    public class UserRequestModel
+    public class UserRequest
     {
         public int Id { get; set; }
         public string Email { get; set; }
@@ -16,6 +16,6 @@ namespace Core.RequestModels
         public string Phone { get; set; }
         public string Password { get; set; }
         public int? GroupId { get; set; }
-        public List<RoleRequestModel> Roles { get; set; }
+        public List<RoleRequest> Roles { get; set; }
     }
 }

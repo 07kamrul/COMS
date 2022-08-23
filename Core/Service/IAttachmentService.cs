@@ -11,7 +11,7 @@ namespace Core.Service
 {
     public interface IAttachmentService
     {
-        AttachmentResponse SaveAttachment(AttachmentRequestModel attachmentRequestModel);
+        AttachmentResponse SaveAttachment(AttachmentRequest attachmentRequestModel);
         List<AttachmentResponse> GetAttachments();
         List<AttachmentResponse> GetAttachmentByMemberId(int memberId);
         AttachmentResponse GetAttachment(int attachmentId);

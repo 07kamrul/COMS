@@ -170,7 +170,7 @@ namespace COMS.Controllers
 
                     var refreshToken = _tokenService.GenerateRefreshToken();
                     user.RefreshToken = refreshToken;
-                    _userService.UpdateUser(_mapper.Map<UserRequestModel>(user));
+                    _userService.UpdateUser(_mapper.Map<UserRequest>(user));
 
                     return Ok(new
                     {
@@ -240,7 +240,7 @@ namespace COMS.Controllers
 
                 var newRefreshToken = _tokenService.GenerateRefreshToken();
                 user.RefreshToken = newRefreshToken;
-                _userService.UpdateUser(_mapper.Map<UserRequestModel>(user));
+                _userService.UpdateUser(_mapper.Map<UserRequest>(user));
 
                 return new ObjectResult(new
                 {

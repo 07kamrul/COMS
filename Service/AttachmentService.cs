@@ -59,7 +59,7 @@ namespace Service
             return _mapper.Map<List<AttachmentResponse>>(_attachmentRepository.GetAll());
         }
 
-        public AttachmentResponse SaveAttachment(AttachmentRequestModel attachmentRequestModel)
+        public AttachmentResponse SaveAttachment(AttachmentRequest attachmentRequestModel)
         {
             string attachmentPath = _configuration["LocalFileStore:Path"];
             string fileGUID = Guid.NewGuid().ToString();

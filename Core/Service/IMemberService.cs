@@ -12,12 +12,12 @@ namespace Core.Service
 {
     public interface IMemberService
     {
-        Page<MemberResponse> Search(MemberSearchRequestModel searchModel, int skip, int take);
-        MemberResponse SaveMember(MemberRequestModel memberRequestModel);
+        Page<MemberResponse> Search(MemberSearchRequest searchModel, int skip, int take);
+        MemberResponse SaveMember(MemberRequest memberRequestModel);
         List<MemberResponse> GetMembers();
         MemberResponse GetMember(int id);
         void DeleteMember(int id);
-        void UpdateMember(MemberRequestModel memberRequestModel);
+        void UpdateMember(MemberRequest memberRequestModel);
         Stream GetAttachmentFile(int id);
         void VerifyMember(int memberId, bool isVerify);
         bool IsExistingMember(string email, int code, string phone, long nid);
