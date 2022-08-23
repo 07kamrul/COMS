@@ -9,20 +9,19 @@ namespace COMS
     {
         public Profiles()
         {
-            CreateMap<Amount, AmountRequestModel>().ReverseMap();
-            CreateMap<Amount, AmountResponse>().ReverseMap();
-
             CreateMap<Attachment, AttachmentResponse>().ReverseMap();
             CreateMap<Attachment, AttachmentRequest>().ReverseMap();
             CreateMap<AttachmentType, AttachmentTypeResponse>().ReverseMap();
             
-            CreateMap<Deposite, DepositRequestModel>().ReverseMap();
-            CreateMap<Deposite, DepositResponse>().ReverseMap();
-            CreateMap<Deposite, DepositSearchRequestModel>().ReverseMap();
-            
             CreateMap<Member, MemberRequest>().ReverseMap();
             CreateMap<Member, MemberResponse>().ReverseMap();
             CreateMap<Member, MemberSearchRequest>().ReverseMap();
+
+            CreateMap<Project, ProjectRequest>().ReverseMap();
+            CreateMap<Project, ProjectResponse>().ReverseMap();
+
+            CreateMap<Transaction, TransactionRequest>().ReverseMap();
+            CreateMap<Transaction, TransactionResponse>().ReverseMap();
 
             CreateMap<Role, RoleResponse>().ReverseMap();
             CreateMap<Role, RoleRequest>().ReverseMap();

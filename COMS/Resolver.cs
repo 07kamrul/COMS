@@ -22,18 +22,14 @@ namespace COMS
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IErrorRepository, ErrorRepository>();
-            services.AddScoped<IDepositRepository, DepositRepository>();
             services.AddScoped<IMemberRepository, MemberRepository>();
-            services.AddScoped<IAmountRepository, AmountRepository>();
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
             services.AddScoped<IAttachmentTypeRepository, AttachmentTypeRepository>();
 
             services.AddScoped<IErrorService, ErrorService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IAmountService, AmountService>();
             services.AddScoped<IMemberService, MemberService>();
-            services.AddScoped<IDepositService, DepositService>();
 
             services.AddSingleton((Serilog.ILogger)Log.Logger);
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

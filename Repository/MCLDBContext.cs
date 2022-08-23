@@ -21,8 +21,8 @@ namespace Repository
         public virtual DbSet<Attachment> Attachments { get; set; }
         public virtual DbSet<AttachmentType> AttachmentTypes { get; set; }
         public virtual DbSet<AuditLog> AuditLogs { get; set; }
-        public virtual DbSet<Amount> Amounts { get; set; }
-        public virtual DbSet<Deposite> Deposites { get; set; }
+        public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<Member> Members { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RoleUser> RoleUser { get; set; }

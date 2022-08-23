@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Model
 {
     [Table("Projects")]
-    public class Project
+    public class Project : BaseEntity
     {
         public string ProjectName { get; set; }
         public string ProjectSize { get; set; }

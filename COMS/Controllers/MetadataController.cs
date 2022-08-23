@@ -45,23 +45,23 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [ResponseCache(Duration = 86400, Location = ResponseCacheLocation.Any)]
-        [HttpGet("Amounts")]
-        public List<AmountResponse> GetAmounts() => _metadataService.GetAmounts();
+        [HttpGet("Projects")]
+        public List<ProjectResponse> GetProjects() => _metadataService.GetProjects();
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [ResponseCache(Duration = 86400, Location = ResponseCacheLocation.Any)]
-        [HttpGet("Amount")]
-        public AmountResponse GetAmount(int amountId) => _metadataService.GetAmount(amountId);
+        [HttpGet("Project")]
+        public ProjectResponse GetProject(int projectId) => _metadataService.GetProject(projectId);
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [ResponseCache(Duration = 86400, Location = ResponseCacheLocation.Any)]
-        [HttpGet("Deposit")]
-        public DepositResponse GetDeposit(int depositId) => _metadataService.GetDeposit(depositId);
+        [HttpGet("Transaction")]
+        public TransactionResponse GetTransaction(int transactionId) => _metadataService.GetTransaction(transactionId);
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [ResponseCache(Duration = 86400, Location = ResponseCacheLocation.Any)]
-        [HttpGet("Deposit")]
-        public List<DepositResponse> GetDeposits() => _metadataService.GetDeposits();
+        [HttpGet("Transaction")]
+        public List<TransactionResponse> GetTransactions() => _metadataService.GetTransactions();
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [ResponseCache(Duration = 86400, Location = ResponseCacheLocation.Any)]
@@ -70,13 +70,13 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [ResponseCache(Duration = 86400, Location = ResponseCacheLocation.Any)]
-        [HttpGet("Deposit")]
-        public List<DepositResponse> GetDepositsByMemberId(int memberId) => _metadataService.GetDepositsByMemberId(memberId);
+        [HttpGet("Transaction")]
+        public List<TransactionResponse> GetTransactionsByMemberId(int memberId) => _metadataService.GetTransactionsByMemberId(memberId);
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [ResponseCache(Duration = 86400, Location = ResponseCacheLocation.Any)]
-        [HttpGet("Amount")]
-        public List<AmountResponse> GetAmountsByMemberId(int memberId) => _metadataService.GetAmountsByMemberId(memberId);
+        [HttpGet("Project")]
+        public List<ProjectResponse> GetProjectsByMemberId(int memberId) => _metadataService.GetProjectsByMemberId(memberId);
 
     }
 }

@@ -16,22 +16,22 @@ namespace Service
         private readonly IMapper _mapper;
         private readonly IAttachmentTypeRepository _attachmentTypeRepository;
         private readonly IUserRepository _userRepository;
-        private readonly IAmountRepository _amountRepository;
-        private readonly IDepositRepository _depositRepository;
+        private readonly IProjectRepository _projectRepository;
+        private readonly ITransactionRepository _transactionRepository;
         private readonly IMemberRepository _memberRepository;
 
         public MetadataService(IMapper mapper, 
             IAttachmentTypeRepository attachmentTypeRepository,
             IUserRepository userRepository, 
-            IAmountRepository amountRepository, 
-            IDepositRepository depositRepository,
+            IProjectRepository projectRepository,
+            ITransactionRepository transactionRepository,
             IMemberRepository memberRepository)
         {
             _mapper = mapper;
             _attachmentTypeRepository = attachmentTypeRepository;
             _userRepository = userRepository;
-            _amountRepository = amountRepository;
-            _depositRepository = depositRepository;
+            _projectRepository = projectRepository;
+            _transactionRepository = transactionRepository;
             _memberRepository = memberRepository;
         }
 
@@ -42,33 +42,33 @@ namespace Service
             return mappedResponse;
         }
 
-        public AmountResponse GetAmount(int id)
+        public ProjectResponse GetProject(int id)
         {
-            return _mapper.Map<AmountResponse>(_amountRepository.GetById(id));
+            return _mapper.Map<ProjectResponse>(_projectRepository.GetById(id));
         }
         
-        public List<AmountResponse> GetAmountsByMemberId(int memberId)
+        public List<ProjectResponse> GetProjectsByMemberId(int memberId)
         {
-            return _mapper.Map<List<AmountResponse>>(_amountRepository.GetAll().Where(x => x.MemberId == memberId).ToList());
+            return _mapper.Map<List<ProjectResponse>>(_projectRepository.GetAll().Where(x => x.MemberId == memberId).ToList());
         }
 
-        public List<AmountResponse> GetAmounts()
+        public List<ProjectResponse> GetProjects()
         {
-            return _mapper.Map<List<AmountResponse>>(_amountRepository.GetAll().ToList());
+            return _mapper.Map<List<ProjectResponse>>(_projectRepository.GetAll().ToList());
         }
 
-        public DepositResponse GetDeposit(int id)
+        public TransactionResponse GetTransaction(int id)
         {
-            return _mapper.Map<DepositResponse>(_depositRepository.GetById(id));
+            return _mapper.Map<TransactionResponse>(_transactionRepository.GetById(id));
         }
 
-        public List<DepositResponse> GetDeposits()
+        public List<TransactionResponse> GetTransactions()
         {
-            return _mapper.Map<List<DepositResponse>>(_depositRepository.GetAll().ToList());
+            return _mapper.Map<List<TransactionResponse>>(_transactionRepository.GetAll().ToList());
         }
-        public List<DepositResponse> GetDepositsByMemberId(int memberId)
+        public List<TransactionResponse> GetTransactionsByMemberId(int memberId)
         {
-            return _mapper.Map<List<DepositResponse>>(_depositRepository.GetAll().Where(x => x.MemberId == memberId).ToList());
+            return _mapper.Map<List<TransactionResponse>>(_transactionRepository.GetAll().Where(x => x.MemberId == memberId).ToList());
         }
 
         public MemberResponse GetMember(int id)
