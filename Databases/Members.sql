@@ -1,14 +1,3 @@
-USE [COMS]
-GO
-
-/****** Object:  Table [dbo].[Members]    Script Date: 8/14/2022 11:15:03 AM ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-DROP TABLE [dbo].[Members]
-
 CREATE TABLE [dbo].[Members](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Code] [int] NOT NULL,
@@ -22,6 +11,7 @@ CREATE TABLE [dbo].[Members](
 	[Email] [nvarchar](50) NULL,
 	[Gender] [nvarchar](50) NULL,
 	[Nationality] [nvarchar](50) NULL,
+    [ProjectId] [int] NOT NULL,
 	[PresentAddress] [nvarchar](250) NULL,
 	[PermanentAddress] [nvarchar](250) NULL,
 	[MaritalStatus] [nvarchar](50) NULL,
