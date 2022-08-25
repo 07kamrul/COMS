@@ -34,8 +34,10 @@ namespace Service
 
         public List<TransactionResponse> GetRequestVerifyTransactions()
         {
-            throw new NotImplementedException();
+            return _mapper.Map<List<TransactionResponse>>(_transactionRepository
+                .GetAll().Where(x => x.IsActive && !x.IsVerified));
         }
+
 
         public TransactionResponse GetTransaction(int id)
         {
@@ -48,6 +50,19 @@ namespace Service
             return _mapper.Map<List<TransactionResponse>>(_transactionRepository.GetAll());
         }
 
+        public List<TransactionResponse> GetTransactionsByMemberId(int memberId)
+        {
+            List<Transaction> memberTransaction = _transactionRepository.GetTransactionsByMemberId(memberId);
+
+            return _mapper.Map<List<TransactionResponse>>(memberTransaction);
+        }
+
+        public List<TransactionResponse> GetTransactionsByProject(int projectId)
+        {
+            List<Transaction> projectTransaction = _transactionRepository.GetTransactionsByProject(projectId);
+
+            return _mapper.Map<List<TransactionResponse>>(projectTransaction);
+        }
 
         public List<TransactionResponse> GetVerifiedTransactions()
         {
@@ -72,9 +87,74 @@ namespace Service
 
         public TransactionResponse SaveTransaction(TransactionRequest transaction)
         {
-            var transactionDate = transaction.TransactionDate;
-            var transactionAmount = transaction.TransactionAmounts;
+            var TDate = transaction.TransactionDate;
+            var dueAmounts = transaction.DueAmounts;
+            var payableAmounts = transaction.PayableAmounts;
+            var transactionAmounts = transaction.TransactionAmounts;
+            var memberId = transaction.MemberId;
+            var projectId = transaction.ProjectId;
+            int numOfMonths = 0;
+            
+            var memberAllTransaction = GetTransactionsByMemberId(memberId);
+            var projectInfo = GetProjectById(projectId);
 
+            if (memberAllTransaction == null)
+            {
+                int installmentNo = 0;
+                var transactionDate = projectInfo.StartDate;
+
+                if (transactionDate <= projectInfo.StartDate)
+                {
+                    numOfMonths = Math.Abs(12 * (transactionDate.Year - projectInfo.StartDate.Date.Year) 
+                        + transactionDate.Month - projectInfo.StartDate.Date.Month);
+
+                    var amounts = payableAmounts * numOfMonths;
+                   
+                    var partialAmounts = transactionAmounts % payableAmounts;
+                    var monthlyAmounts = transactionAmounts - partialAmounts;
+                    int numofInstallment = monthlyAmounts / numOfMonths;
+
+                    if (transactionAmounts <= amounts)
+                    {
+                        for (int installment = 0; installment <= numofInstallment; installment++)
+                        {
+                            transaction.InstallmentNo = installment;
+                            transaction.TransactionAmounts = payableAmounts;
+                            transaction.TransactionDate = TDate.AddMonths(installment);
+                            if (installment == numofInstallment)
+                            {
+                                transaction.DueAmounts = Math.Abs(amounts - transactionAmounts);
+                            }
+                            transaction.DueAmounts = 0;
+
+                            _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
+                        }
+                    }
+                    else if (transactionAmounts >= amounts)
+                    {
+                        for(int installment = 0; installment <= numofInstallment; installment++)
+                        {
+                            transaction.InstallmentNo = installment;
+                            transaction.TransactionAmounts = payableAmounts;
+                            transaction.TransactionDate = TDate.AddMonths(installment);
+                     
+                            _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
+                        }
+                    }
+                    else
+                    {
+                        _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
+                    }
+                }
+
+                Transaction saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
+                return _mapper.Map<TransactionResponse>(saveTransaction);
+            }
+            else
+            {
+                var memberLastTransaction = memberAllTransaction.OrderByDescending(x => x.TransactionDate).FirstOrDefault();
+
+            }
 
         }
     }

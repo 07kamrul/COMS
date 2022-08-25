@@ -16,5 +16,7 @@ namespace Core.Service
         List<TransactionResponse> GetRequestVerifyTransactions();
         bool IsExistingTransaction(int memberId, DateTime transactionDate, int transactionType);
         TransactionResponse SaveTransaction(TransactionRequest transaction);
+        List<TransactionResponse> GetTransactionsByMemberId(int memberId);
+        List<TransactionResponse> GetTransactionsByProject(int projectId);
     }
 }

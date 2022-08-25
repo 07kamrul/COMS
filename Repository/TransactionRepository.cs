@@ -19,6 +19,17 @@ namespace Repository
             _context = context;
         }
 
+
+        public List<Transaction> GetTransactionsByMemberId(int memberId)
+        {
+            return _context.Transactions.AsNoTracking().Where(x => x.MemberId == memberId).ToList();
+        }
+
+        public List<Transaction> GetTransactionsByProject(int projectId)
+        {
+            return _context.Transactions.AsNoTracking().Where(x => x.ProjectId == projectId).ToList();
+        }
+
         public bool IsExistingTransaction(int memberId, DateTime transactionDate, int transactionType)
         {
             return _context.Transactions.AsNoTracking()
@@ -27,5 +38,7 @@ namespace Repository
             || x.TransactionType == transactionType)
             .Count() > 0;
         }
+
+
     }
 }

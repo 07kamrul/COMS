@@ -64,6 +64,24 @@ namespace COMS.Controllers
         }
 
 
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetTransactionsByMemberId/{id}")]
+        public List<TransactionResponse> GetTransactionsByMemberId(int memberId)
+        {
+            _logger.Information("Get all Transaction started.");
+            try
+            {
+                return _transactionService.GetTransactionsByMemberId(memberId);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("GetVerifiedTransactions")]
         public List<TransactionResponse> GetVerifiedTransactions()
@@ -88,6 +106,22 @@ namespace COMS.Controllers
             try
             {
                 return _transactionService.GetRequestVerifyTransactions();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetTransactionsByProject/{id}")]
+        public List<TransactionResponse> GetTransactionsByProject(int projectId)
+        {
+            _logger.Information("Get all Transaction started.");
+            try
+            {
+                return _transactionService.GetTransactionsByProject(projectId);
             }
             catch (Exception ex)
             {
