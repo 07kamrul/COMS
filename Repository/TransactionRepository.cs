@@ -1,5 +1,6 @@
 ﻿using Core.Common;
 using Core.Repository;
+using Microsoft.EntityFrameworkCore;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,15 @@ namespace Repository
         public TransactionRepository(MCLDBContext context, IUserResolverService user) : base(context, user)
         {
             _context = context;
+        }
+
+        public bool IsExistingTransaction(int memberId, DateTime transactionDate, int transactionType)
+        {
+            return _context.Transactions.AsNoTracking()
+            .Where(x => x.MemberId == memberId 
+            || x.TransactionDate == transactionDate 
+            || x.TransactionType == transactionType)
+            .Count() > 0;
         }
     }
 }

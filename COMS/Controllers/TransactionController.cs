@@ -1,41 +1,43 @@
-﻿using COMS.Security;
+﻿using AutoMapper;
+using COMS.Security;
+using Core.Common;
 using Core.RequestModels;
 using Core.Service;
 using Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Model;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using static Core.Common.Enums;
 
 namespace COMS.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
-    public class MemberController : BaseApiController
+    public class TransactionController : BaseApiController
     {
-        private readonly IMemberService _memberService;
+        private readonly ITransactionService _transactionService;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public MemberController(IMemberService memberService, ILogger logger)
+        public TransactionController(ITransactionService transactionService, ILogger logger, IMapper mapper)
         {
-            _memberService = memberService;
+            _transactionService = transactionService;
             _logger = logger;
+            _mapper = mapper;
         }
 
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetMember")]
-        public MemberResponse GetMember(int Id)
+        [HttpGet("GetTransaction")]
+        public List<TransactionResponse> GetTransactions()
         {
-            _logger.Information("Get all member started.");
+            _logger.Information("Get all Transactions started.");
             try
             {
-                return _memberService.GetMember(Id);
+                return _transactionService.GetTransactions();
             }
             catch (Exception ex)
             {
@@ -46,13 +48,13 @@ namespace COMS.Controllers
 
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetMembers")]
-        public List<MemberResponse> GetMembers()
+        [HttpGet("GetTransaction")]
+        public TransactionResponse GetTransaction(int Id)
         {
-            _logger.Information("Get all members started.");
+            _logger.Information("Get all Transaction started.");
             try
             {
-                return _memberService.GetMembers();
+                return _transactionService.GetTransaction(Id);
             }
             catch (Exception ex)
             {
@@ -63,30 +65,13 @@ namespace COMS.Controllers
 
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetInactiveMembers")]
-        public List<MemberResponse> GetInactiveMembers()
-        {
-            _logger.Information("Get inactive members started.");
-            try
-            {
-                return _memberService.GetInactiveMembers();
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex.Message);
-                throw;
-            }
-        }
-
-
-        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetVerifiedMembers")]
-        public List<MemberResponse> GetVerifiedMembers()
+        [HttpGet("GetVerifiedTransactions")]
+        public List<TransactionResponse> GetVerifiedTransactions()
         {
             _logger.Information("Get Verified Members started.");
             try
             {
-                return _memberService.GetVerifiedMembers();
+                return _transactionService.GetVerifiedTransactions();
             }
             catch (Exception ex)
             {
@@ -95,15 +80,14 @@ namespace COMS.Controllers
             }
         }
 
-
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetRequestVerifyMembers")]
-        public List<MemberResponse> GetRequestVerifyMembers()
+        [HttpGet("GetRequestVerifyTransactions")]
+        public List<TransactionResponse> GetRequestVerifyransactions()
         {
             _logger.Information("Get Request Verify Members started.");
             try
             {
-                return _memberService.GetRequestVerifyMembers();
+                return _transactionService.GetRequestVerifyTransactions();
             }
             catch (Exception ex)
             {
@@ -114,41 +98,26 @@ namespace COMS.Controllers
 
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpPost("SearchMember")]
-        public Page<MemberResponse> Search([FromBody] MemberSearchRequest request, int skip, int pageSize)
-        {
-            _logger.Information("Search member started.");
-            try
-            {
-                return _memberService.Search(request, skip, pageSize);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex.Message);
-                throw;
-            }
-        }
-
-
-        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpPost("SaveMember")]
+        [HttpPost("SaveTransaction")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public MemberResponse SaveMember([FromBody] MemberRequest member)
+        public TransactionResponse SaveMember([FromBody] TransactionRequest transaction)
         {
             _logger.Information("Save member started");
             try
             {
-                if (member.Email == null || member.Code == 0 || member.Phone == null || member.NID == 0)
+                if (transaction.MemberId == 0 || transaction.TransactionAmounts == 0
+                    || transaction.TransactionType == 0 || transaction.TransactionDate == null)
                 {
                     throw new BadHttpRequestException("This Email or Code or Phone invalid.");
                 }
 
-                if (_memberService.IsExistingMember(member.Email, member.Code, member.Phone, member.NID))
+/*                if (_transactionService.IsExistingTransaction(transaction.MemberId,
+                    transaction.TransactionDate, transaction.TransactionType))
                 {
-                    throw new BadHttpRequestException("This Email or Code or Phone are already in use.");
-                }
+                    throw new BadHttpRequestException("This Transaction already exist on this month.");
+                }*/
 
-                return _memberService.SaveMember(member);
+                return _transactionService.SaveTransaction(transaction);
             }
             catch (Exception ex)
             {
@@ -156,7 +125,6 @@ namespace COMS.Controllers
                 throw;
             }
         }
-
 
         [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
         [HttpPut("UpdateMember")]
@@ -183,15 +151,14 @@ namespace COMS.Controllers
             }
         }
 
-
         [ClaimRequirement(PermissionType.Admin)]
         [HttpDelete("DeleteMember/{id}")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public ActionResult DeleteMember(int id)
         {
             _logger.Information($"Deleting member. id: {id}");
-            
-            if(id == 0)
+
+            if (id == 0)
             {
                 _logger.Information("Id cannot be zero.");
                 return BadRequest();
@@ -203,11 +170,12 @@ namespace COMS.Controllers
                 _memberService.DeleteMember(id);
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Error(ex.Message);
-                return Problem(ex.Message, null, (int)HttpStatusCode.InternalServerError);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+                return Problem(ex.Message, null, (int)HttpStatusCode.InternalServerError);
             }
         }
+
     }
 }

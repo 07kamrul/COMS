@@ -15,6 +15,7 @@ namespace Core.Common
             _config = config;
         }
 
+
         public Jwt Jwt => new Jwt
         {
             Key = _config["Jwt:Key"],
@@ -22,10 +23,12 @@ namespace Core.Common
             RememberMeTokenLifespan = _config["Jwt:RememberMeTokenLifespan"]
         };
 
+
         public ConnectionStrings ConnectionStrings => new ConnectionStrings
         {
             DBConnection = _config["ConnectionStrings:DBConnection"]
         };
+
 
         public LogSettings LogSettings => new LogSettings
         {
@@ -33,10 +36,12 @@ namespace Core.Common
             LogPath = _config["LogSettings:LogPath"]
         };
 
+
         public LocalFileStoreSettings LocalFileStore => new LocalFileStoreSettings
         {
             Path = _config["LocalFileStore:Path"]
         };
+
     }
 
     public class Jwt
@@ -45,18 +50,31 @@ namespace Core.Common
         public string TokenLifespan { get; set; }
         public string RememberMeTokenLifespan { get; set; }
     }
+
+
     public class ConnectionStrings
     {
         public string DBConnection { get; set; }
     }
+
+
     public class LogSettings
     {
         public string LogLevel { get; set; }
         public string LogPath { get; set; }
     }
+
+
     public class LocalFileStoreSettings
     {
         public string Path { get; set; }
     }
 
+
+    public class TransactionType
+    {
+        public const int Deposit = 1;
+        public const int Withdraw = 2;
+        public const int Cost = 9;
+    }
 }

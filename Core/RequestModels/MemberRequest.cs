@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.RequestModels
 {
@@ -31,5 +28,6 @@ namespace Core.RequestModels
         public bool IsVerified { get; set; }
         public int VerifiedBy { get; set; }
         public DateTime? VerificationDate { get; set; }
+        public List<AttachmentRequest> Attachments { get; set; }
     }
 }

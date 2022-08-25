@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.RequestModels
 {
@@ -14,5 +10,8 @@ namespace Core.RequestModels
         public int TransactionAmounts { get; set; }
         public int TransactionType { get; set; }
         public DateTime TransactionDate { get; set; }
+        public int VerifiedBy { get; set; }
+        public DateTime? VerificationDate { get; set; }
+        public AttachmentRequest Attachment { get; set; }
     }
 }

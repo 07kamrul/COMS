@@ -15,5 +15,9 @@ namespace Model
         public int TransactionAmounts { get; set; }
         public int TransactionType { get; set; }
         public DateTime TransactionDate { get; set; }
+        public bool IsVerified { get; set; }
+        public int VerifiedBy { get; set; }
+        public DateTime? VerificationDate { get; set; }
+        public Attachment Attachment { get; set; }
     }
 }

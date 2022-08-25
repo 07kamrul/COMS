@@ -9,5 +9,6 @@ namespace Core.Repository
 {
     public interface ITransactionRepository : IBaseRepository<Transaction>
     {
+        bool IsExistingTransaction(int memberId, DateTime transactionDate, int transactionType);
     }
 }

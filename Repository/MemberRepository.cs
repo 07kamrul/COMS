@@ -21,7 +21,10 @@ namespace Repository
 
         public bool IsExistingMember(string email, int code, string phone, long nid)
         {
-            return _context.Members.AsNoTracking().Where(x => x.Email.ToLower() == email.ToLower() || x.Code == code || x.Phone == phone || x.NID == nid).Count() > 0;
+            return _context.Members.AsNoTracking()
+                .Where(x => x.Email.ToLower() == email.ToLower()
+                || x.Code == code || x.Phone == phone || x.NID == nid)
+                .Count() > 0;
         }
 
         public Page<Member> Search(MemberSearchRequest searchModel, int skip, int take)
