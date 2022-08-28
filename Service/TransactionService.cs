@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Common;
 using Core.FileStore;
 using Core.Repository;
 using Core.RequestModels;
@@ -87,29 +88,30 @@ namespace Service
 
         public TransactionResponse SaveTransaction(TransactionRequest transaction)
         {
-            var TDate = transaction.TransactionDate;
+            var transactionDate = transaction.TransactionDate;
             var dueAmounts = transaction.DueAmounts;
             var payableAmounts = transaction.PayableAmounts;
             var transactionAmounts = transaction.TransactionAmounts;
             var memberId = transaction.MemberId;
             var projectId = transaction.ProjectId;
             int numOfMonths = 0;
-            
+            Transaction saveTransaction = new Transaction();
+
             var memberAllTransaction = GetTransactionsByMemberId(memberId);
+            
             var projectInfo = GetProjectById(projectId);
+            var projectStartDate = projectInfo.StartDate;
 
-            if (memberAllTransaction == null)
+            if (transaction.TransactionType == TransactionType.Deposit)
             {
-                int installmentNo = 0;
-                var transactionDate = projectInfo.StartDate;
-
-                if (transactionDate <= projectInfo.StartDate)
+                //For First Installment
+                if (memberAllTransaction == null)
                 {
-                    numOfMonths = Math.Abs(12 * (transactionDate.Year - projectInfo.StartDate.Date.Year) 
-                        + transactionDate.Month - projectInfo.StartDate.Date.Month);
+                    numOfMonths = Math.Abs(12 * (transactionDate.Year - projectStartDate.Date.Year)
+                            + transactionDate.Month - projectStartDate.Date.Month);
 
                     var amounts = payableAmounts * numOfMonths;
-                   
+
                     var partialAmounts = transactionAmounts % payableAmounts;
                     var monthlyAmounts = transactionAmounts - partialAmounts;
                     int numofInstallment = monthlyAmounts / numOfMonths;
@@ -120,42 +122,85 @@ namespace Service
                         {
                             transaction.InstallmentNo = installment;
                             transaction.TransactionAmounts = payableAmounts;
-                            transaction.TransactionDate = TDate.AddMonths(installment);
+                            transaction.TransactionDate = transactionDate.AddMonths(installment);
+
                             if (installment == numofInstallment)
                             {
                                 transaction.DueAmounts = Math.Abs(amounts - transactionAmounts);
                             }
                             transaction.DueAmounts = 0;
 
-                            _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
+                            saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
                         }
                     }
                     else if (transactionAmounts >= amounts)
                     {
-                        for(int installment = 0; installment <= numofInstallment; installment++)
+                        for (int installment = 0; installment <= numofInstallment; installment++)
                         {
                             transaction.InstallmentNo = installment;
                             transaction.TransactionAmounts = payableAmounts;
-                            transaction.TransactionDate = TDate.AddMonths(installment);
-                     
-                            _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
+                            transaction.TransactionDate = transactionDate.AddMonths(installment);
+
+                            saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
+                        }
+                    }                  
+                }
+                //For Second or other Installment
+                else
+                {
+                    var memberLastTransaction = memberAllTransaction
+                        .OrderByDescending(x => x.TransactionDate).FirstOrDefault();
+
+                    var lastTransactionDate = memberLastTransaction.TransactionDate;
+
+                    numOfMonths = Math.Abs(12 * (transactionDate.Year - lastTransactionDate.Date.Year)
+                        + transactionDate.Month - lastTransactionDate.Date.Month);
+
+                    var amounts = payableAmounts * numOfMonths;
+
+                    var partialAmounts = transactionAmounts % payableAmounts;
+                    var monthlyAmounts = transactionAmounts - partialAmounts;
+                    int numofInstallment = monthlyAmounts / numOfMonths;
+
+                    if (transactionAmounts <= amounts)
+                    {
+                        for (int installment = 0; installment <= numofInstallment; installment++)
+                        {
+                            transaction.InstallmentNo = installment;
+                            transaction.TransactionAmounts = payableAmounts;
+                            transaction.TransactionDate = transactionDate.AddMonths(installment);
+                            if (installment == numofInstallment)
+                            {
+                                transaction.DueAmounts = Math.Abs(amounts - transactionAmounts);
+                            }
+                            transaction.DueAmounts = 0;
+
+                            saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
                         }
                     }
                     else
                     {
-                        _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
-                    }
+                        for (int installment = 0; installment <= numofInstallment; installment++)
+                        {
+                            transaction.InstallmentNo = installment;
+                            transaction.TransactionAmounts = payableAmounts;
+                            transaction.TransactionDate = transactionDate.AddMonths(installment);
+
+                            saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
+                        }
+                    }                   
                 }
-
-                Transaction saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
-                return _mapper.Map<TransactionResponse>(saveTransaction);
             }
-            else
+            else if (transaction.TransactionType == TransactionType.Withdraw)
             {
-                var memberLastTransaction = memberAllTransaction.OrderByDescending(x => x.TransactionDate).FirstOrDefault();
+
+            }
+            else if (transaction.TransactionType == TransactionType.Cost)
+            {
 
             }
 
+            return _mapper.Map<TransactionResponse>(saveTransaction);
         }
     }
 }
