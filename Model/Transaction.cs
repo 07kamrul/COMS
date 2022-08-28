@@ -13,9 +13,9 @@ namespace Model
         public int MemberId { get; set; }
         public int ProjectId { get; set; }
         public int InstallmentNo { get; set; }
-        public int DueAmounts { get; set; }
-        public int PayableAmounts { get; set; }
-        public int TransactionAmounts { get; set; }
+        public double DueAmounts { get; set; }
+        public double PayableAmounts { get; set; }
+        public double TransactionAmounts { get; set; }
         public int TransactionType { get; set; }
         public DateTime TransactionDate { get; set; }
         public bool IsVerified { get; set; }

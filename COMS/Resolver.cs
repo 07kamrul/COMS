@@ -23,6 +23,9 @@ namespace COMS
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IErrorRepository, ErrorRepository>();
             services.AddScoped<IMemberRepository, MemberRepository>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
             services.AddScoped<IAttachmentTypeRepository, AttachmentTypeRepository>();
 
@@ -30,6 +33,10 @@ namespace COMS
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IMemberService, MemberService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<ITransactionService, TransactionService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
 
             services.AddSingleton((Serilog.ILogger)Log.Logger);
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

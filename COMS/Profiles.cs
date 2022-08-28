@@ -17,6 +17,9 @@ namespace COMS
             CreateMap<Member, MemberResponse>().ReverseMap();
             CreateMap<Member, MemberSearchRequest>().ReverseMap();
 
+            CreateMap<Account, AccountRequest>().ReverseMap();
+            CreateMap<Account, AccountResponse>().ReverseMap();
+
             CreateMap<Project, ProjectRequest>().ReverseMap();
             CreateMap<Project, ProjectResponse>().ReverseMap();
 

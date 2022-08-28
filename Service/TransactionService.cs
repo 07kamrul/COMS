@@ -114,7 +114,7 @@ namespace Service
 
                     var partialAmounts = transactionAmounts % payableAmounts;
                     var monthlyAmounts = transactionAmounts - partialAmounts;
-                    int numofInstallment = monthlyAmounts / numOfMonths;
+                    int numofInstallment = (int)(monthlyAmounts / numOfMonths);
 
                     if (transactionAmounts <= amounts)
                     {
@@ -160,7 +160,7 @@ namespace Service
 
                     var partialAmounts = transactionAmounts % payableAmounts;
                     var monthlyAmounts = transactionAmounts - partialAmounts;
-                    int numofInstallment = monthlyAmounts / numOfMonths;
+                    int numofInstallment = (int)(monthlyAmounts / numOfMonths);
 
                     if (transactionAmounts <= amounts)
                     {
