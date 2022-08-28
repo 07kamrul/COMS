@@ -2,6 +2,7 @@ CREATE TABLE [dbo].[Transactions](
     [Id] [int] IDENTITY(1,1) NOT NULL,
     [MemberId] [int] NOT NULL,
     [ProjectId] [int] NOT NULL,
+    [AccountId] [int] NOT NULL,
     [InstallmentNo] [int] NOT NULL,
     [DueAmounts] [numeric](18,2) NOT NULL,
     [PayableAmounts] [numeric](18,2) NOT NULL,

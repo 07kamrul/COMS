@@ -22,16 +22,20 @@ namespace Service
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IFileStore _fileStore;
         private readonly IConfiguration _configuration;
+        private readonly IProjectService _projectService;
 
         public TransactionService(IMapper mapper, ITransactionRepository transactionRepository,
-            IAttachmentRepository attachmentRepository, IFileStore fileStore, IConfiguration configuration)
+            IAttachmentRepository attachmentRepository, IFileStore fileStore,
+            IConfiguration configuration, IProjectService projectService)
         {
             _mapper = mapper;
             _transactionRepository = transactionRepository;
             _attachmentRepository = attachmentRepository;
             _fileStore = fileStore;
             _configuration = configuration;
+            _projectService = projectService;
         }
+
 
         public List<TransactionResponse> GetRequestVerifyTransactions()
         {
@@ -99,7 +103,7 @@ namespace Service
 
             var memberAllTransaction = GetTransactionsByMemberId(memberId);
             
-            var projectInfo = GetProjectById(projectId);
+            var projectInfo = _projectService.GetProject(projectId);
             var projectStartDate = projectInfo.StartDate;
 
             if (transaction.TransactionType == TransactionType.Deposit)
@@ -201,6 +205,10 @@ namespace Service
             }
 
             return _mapper.Map<TransactionResponse>(saveTransaction);
+        }
+        public void DeleteTransaction(int id)
+        {
+
         }
     }
 }

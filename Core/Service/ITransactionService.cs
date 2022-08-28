@@ -18,5 +18,6 @@ namespace Core.Service
         TransactionResponse SaveTransaction(TransactionRequest transaction);
         List<TransactionResponse> GetTransactionsByMemberId(int memberId);
         List<TransactionResponse> GetTransactionsByProject(int projectId);
+        void DeleteTransaction(int id);
     }
 }

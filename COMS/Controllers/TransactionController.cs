@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using static Core.Common.Enums;
 
 namespace COMS.Controllers
@@ -31,7 +32,7 @@ namespace COMS.Controllers
 
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetTransaction")]
+        [HttpGet("GetTransactions")]
         public List<TransactionResponse> GetTransactions()
         {
             _logger.Information("Get all Transactions started.");
@@ -48,7 +49,7 @@ namespace COMS.Controllers
 
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetTransaction")]
+        [HttpGet("GetTransaction/{id}")]
         public TransactionResponse GetTransaction(int Id)
         {
             _logger.Information("Get all Transaction started.");
@@ -145,12 +146,6 @@ namespace COMS.Controllers
                     throw new BadHttpRequestException("This Email or Code or Phone invalid.");
                 }
 
-/*                if (_transactionService.IsExistingTransaction(transaction.MemberId,
-                    transaction.TransactionDate, transaction.TransactionType))
-                {
-                    throw new BadHttpRequestException("This Transaction already exist on this month.");
-                }*/
-
                 return _transactionService.SaveTransaction(transaction);
             }
             catch (Exception ex)
@@ -161,11 +156,11 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
-        [HttpPut("UpdateMember")]
+        [HttpPut("UpdateTransaction")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public ActionResult UpdateMember([FromBody] MemberRequest memberRequestModel)
+        public ActionResult UpdateTransaction([FromBody] TransactionRequest transaction)
         {
-            _logger.Information($"Updating member: {memberRequestModel.Name}");
+            _logger.Information($"Updating member: {transaction.TransactionDate}");
             try
             {
                 if (!ModelState.IsValid)
@@ -173,9 +168,9 @@ namespace COMS.Controllers
                     throw new BadHttpRequestException("Invalid request.");
                 }
 
-                _memberService.SaveMember(memberRequestModel);
+                _transactionService.SaveTransaction(transaction);
 
-                _logger.Information($"Successfully updated member: {memberRequestModel.Name}");
+                _logger.Information($"Successfully updated member: {transaction.TransactionDate}");
                 return Ok();
             }
             catch (Exception ex)
@@ -186,9 +181,9 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Admin)]
-        [HttpDelete("DeleteMember/{id}")]
+        [HttpDelete("DeleteTransaction/{id}")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public ActionResult DeleteMember(int id)
+        public ActionResult DeleteTransaction(int id)
         {
             _logger.Information($"Deleting member. id: {id}");
 
@@ -201,7 +196,7 @@ namespace COMS.Controllers
             try
             {
                 _logger.Information("Member successfully deleted.");
-                _memberService.DeleteMember(id);
+                _transactionService.DeleteTransaction(id);
                 return Ok();
             }
             catch (Exception ex)
@@ -210,6 +205,5 @@ namespace COMS.Controllers
                 return Problem(ex.Message, null, (int)HttpStatusCode.InternalServerError);
             }
         }
-
     }
 }
