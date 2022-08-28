@@ -9,5 +9,6 @@ namespace Core.Repository
 {
     public interface IAccountRepository : IBaseRepository<Account>
     {
+        List<Account> GetAccountsByMember(int id);
     }
 }

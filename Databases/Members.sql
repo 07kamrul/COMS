@@ -12,6 +12,8 @@ CREATE TABLE [dbo].[Members](
 	[Gender] [nvarchar](50) NULL,
 	[Nationality] [nvarchar](50) NULL,
     [ProjectId] [int] NOT NULL,
+    [NumberOfAccount] [int] NOT NULL,
+    [TotalAmounts] [numeric](18,2) NOT NULL,
 	[PresentAddress] [nvarchar](250) NULL,
 	[PermanentAddress] [nvarchar](250) NULL,
 	[MaritalStatus] [nvarchar](50) NULL,

@@ -18,6 +18,8 @@ namespace Model
         public DateTime DateOfBirth{ get; set; }
         public long NID { get; set; }
         public int ProjectId { get; set; }
+        public int NumberOfAccount { get; set; }
+        public double TotalAmounts { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Gender { get; set; }

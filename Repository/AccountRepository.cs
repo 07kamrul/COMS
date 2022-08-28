@@ -1,5 +1,6 @@
 ﻿using Core.Common;
 using Core.Repository;
+using Microsoft.EntityFrameworkCore;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,11 @@ namespace Repository
         public AccountRepository(MCLDBContext context, IUserResolverService user) : base(context, user)
         {
             _context = context;
+        }
+
+        public List<Account> GetAccountsByMember(int id)
+        {
+            return _context.Accounts.AsNoTracking().Where(x => x.MemberId == id).ToList();
         }
     }
 }

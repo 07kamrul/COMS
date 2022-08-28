@@ -21,13 +21,11 @@ namespace COMS.Controllers
     {
         private readonly ITransactionService _transactionService;
         private readonly ILogger _logger;
-        private readonly IMapper _mapper;
 
-        public TransactionController(ITransactionService transactionService, ILogger logger, IMapper mapper)
+        public TransactionController(ITransactionService transactionService, ILogger logger)
         {
             _transactionService = transactionService;
             _logger = logger;
-            _mapper = mapper;
         }
 
 

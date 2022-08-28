@@ -23,10 +23,13 @@ namespace Service
         private readonly IFileStore _fileStore;
         private readonly IConfiguration _configuration;
         private readonly IProjectService _projectService;
+        private readonly IAccountService _accountService;
+        private readonly IMemberService _memberService;
 
         public TransactionService(IMapper mapper, ITransactionRepository transactionRepository,
             IAttachmentRepository attachmentRepository, IFileStore fileStore,
-            IConfiguration configuration, IProjectService projectService)
+            IConfiguration configuration, IProjectService projectService,
+            IAccountService accountService, IMemberService memberService)
         {
             _mapper = mapper;
             _transactionRepository = transactionRepository;
@@ -34,6 +37,8 @@ namespace Service
             _fileStore = fileStore;
             _configuration = configuration;
             _projectService = projectService;
+            _accountService = accountService;
+            _memberService = memberService;
         }
 
 
@@ -99,11 +104,15 @@ namespace Service
             var memberId = transaction.MemberId;
             var projectId = transaction.ProjectId;
             int numOfMonths = 0;
-            Transaction saveTransaction = new Transaction();
 
+            Transaction saveTransaction = new Transaction();
+            var getMemberAccounts = _accountService.GetAccountsByMember(memberId);
             var memberAllTransaction = GetTransactionsByMemberId(memberId);
-            
+            var depositAmount = memberAllTransaction
+                .Where(d => d.AccountId == transaction.AccountId && d.TransactionType == TransactionType.Deposit)
+                .Sum(s => s.TransactionAmounts);
             var projectInfo = _projectService.GetProject(projectId);
+            var getMember = _memberService.GetMember(memberId);
             var projectStartDate = projectInfo.StartDate;
 
             if (transaction.TransactionType == TransactionType.Deposit)
@@ -197,12 +206,26 @@ namespace Service
             }
             else if (transaction.TransactionType == TransactionType.Withdraw)
             {
-
+                if (transaction.TransactionAmounts == depositAmount)
+                {
+                    saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
+                }
             }
             else if (transaction.TransactionType == TransactionType.Cost)
             {
-
+                saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
             }
+
+            var getMemberAccount = getMemberAccounts.FirstOrDefault(x => x.Id == transaction.AccountId);
+            getMemberAccount.TotalAmounts = GetTransactionsByMemberId(memberId)
+                .Where(d => d.TransactionType == TransactionType.Deposit).Sum(x => x.TransactionAmounts)
+                - GetTransactionsByMemberId(memberId)
+                .Where(d => d.TransactionType == TransactionType.Withdraw).Sum(x => x.TransactionAmounts);
+
+            _accountService.SaveAccount(_mapper.Map<AccountRequest>(getMemberAccount));
+
+            getMember.TotalAmounts = getMemberAccounts.Sum(x => x.TotalAmounts);
+            _memberService.SaveMember(_mapper.Map<MemberRequest>(getMember));
 
             return _mapper.Map<TransactionResponse>(saveTransaction);
         }
