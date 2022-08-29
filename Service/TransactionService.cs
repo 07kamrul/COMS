@@ -236,7 +236,22 @@ namespace Service
         }
         public void DeleteTransaction(int id)
         {
+            var transactionInfo = GetTransaction(id);
+            var memberAccountInfo = _accountService.GetAccountsByMember(transactionInfo.MemberId)
+                .FirstOrDefault(x => x.Id == transactionInfo.AccountId);
 
+            var getMemberAccounts = _accountService.GetAccountsByMember(transactionInfo.MemberId);
+            var getMember = _memberService.GetMember(transactionInfo.MemberId);
+
+            memberAccountInfo.TotalAmounts = memberAccountInfo.TotalAmounts - transactionInfo.TransactionAmounts;
+
+            _accountService.SaveAccount(_mapper.Map<AccountRequest>(memberAccountInfo));
+
+            getMember.TotalAmounts = getMemberAccounts.Sum(x => x.TotalAmounts);
+
+            _memberService.SaveMember(_mapper.Map<MemberRequest>(getMember));
+
+            _transactionRepository.Delete(_transactionRepository.GetById(id));
         }
     }
 }

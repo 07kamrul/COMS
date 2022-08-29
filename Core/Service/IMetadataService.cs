@@ -16,7 +16,7 @@ namespace Core.Service
         TransactionResponse GetTransaction(int id);
         List<MemberResponse> GetMembers();
         MemberResponse GetMember(int id);
-        List<ProjectResponse> GetProjectsByMemberId(int memberId);
         List<TransactionResponse> GetTransactionsByMemberId(int memberId);
+        List<MemberResponse> GetProjectsByMemberId(int memberId);
     }
 }

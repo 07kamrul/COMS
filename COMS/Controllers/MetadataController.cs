@@ -88,7 +88,7 @@ namespace COMS.Controllers
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [ResponseCache(Duration = 86400, Location = ResponseCacheLocation.Any)]
         [HttpGet("ProjectsByMemberId")]
-        public List<ProjectResponse> GetProjectsByMemberId(int memberId) => _metadataService.GetProjectsByMemberId(memberId);
+        public List<MemberResponse> GetProjectsByMemberId(int memberId) => _metadataService.GetProjectsByMemberId(memberId);
 
     }
 }

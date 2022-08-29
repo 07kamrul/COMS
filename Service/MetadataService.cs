@@ -47,9 +47,9 @@ namespace Service
             return _mapper.Map<ProjectResponse>(_projectRepository.GetById(id));
         }
         
-        public List<ProjectResponse> GetProjectsByMemberId(int memberId)
+        public List<MemberResponse> GetProjectsByMemberId(int memberId)
         {
-            return _mapper.Map<List<ProjectResponse>>(_projectRepository.GetAll().Where(x => x.MemberId == memberId).ToList());
+            return _mapper.Map<List<MemberResponse>>(_memberRepository.GetAll().Where(x => x.Id == memberId).ToList());
         }
 
         public List<ProjectResponse> GetProjects()

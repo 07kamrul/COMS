@@ -97,6 +97,7 @@ namespace COMS.Controllers
             }
         }
 
+
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("GetRequestVerifyTransactions")]
         public List<TransactionResponse> GetRequestVerifyransactions()
@@ -112,6 +113,7 @@ namespace COMS.Controllers
                 throw;
             }
         }
+
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("GetTransactionsByProject/{id}")]
@@ -153,6 +155,7 @@ namespace COMS.Controllers
             }
         }
 
+
         [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
         [HttpPut("UpdateTransaction")]
         [ApiExplorerSettings(IgnoreApi = true)]
@@ -177,6 +180,7 @@ namespace COMS.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
 
         [ClaimRequirement(PermissionType.Admin)]
         [HttpDelete("DeleteTransaction/{id}")]

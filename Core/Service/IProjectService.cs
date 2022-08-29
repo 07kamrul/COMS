@@ -1,4 +1,5 @@
-﻿using Core.ViewModels;
+﻿using Core.RequestModels;
+using Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace Core.Service
     {
         List<ProjectResponse> GetProjects();
         ProjectResponse GetProject(int id);
+        ProjectResponse SaveProject(ProjectRequest project);
+        void DeleteProject(int id);
     }
 }

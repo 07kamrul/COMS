@@ -3,7 +3,6 @@ CREATE TABLE [dbo].[Projects](
 	[ProjectName] [nvarchar](100) NOT NULL,
 	[ProjectSize] [nvarchar](100) NOT NULL,
 	[Location] [nvarchar](100) NOT NULL,
-	[MemberId] [int] NOT NULL,
 	[NumberOfShare] [int] NOT NULL,
 	[TotalCost] [int] NOT NULL,
 	[StartDate] [date] NOT NULL,

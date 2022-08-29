@@ -12,7 +12,6 @@ namespace Core.ViewModels
         public string ProjectName { get; set; }
         public string ProjectSize { get; set; }
         public string Location { get; set; }
-        public int MemberId { get; set; }
         public int NumberOfShare { get; set; }
         public int TotalCost { get; set; }
         public DateTime StartDate { get; set; }
