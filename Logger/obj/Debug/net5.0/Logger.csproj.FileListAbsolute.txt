@@ -1,0 +1,12 @@
+D:\Practice\ASA\COMS\COMS\Logger\bin\Debug\net5.0\Logger.deps.json
+D:\Practice\ASA\COMS\COMS\Logger\bin\Debug\net5.0\Logger.dll
+D:\Practice\ASA\COMS\COMS\Logger\bin\Debug\net5.0\Logger.pdb
+D:\Practice\ASA\COMS\COMS\Logger\obj\Debug\net5.0\Logger.csproj.AssemblyReference.cache
+D:\Practice\ASA\COMS\COMS\Logger\obj\Debug\net5.0\Logger.GeneratedMSBuildEditorConfig.editorconfig
+D:\Practice\ASA\COMS\COMS\Logger\obj\Debug\net5.0\Logger.AssemblyInfoInputs.cache
+D:\Practice\ASA\COMS\COMS\Logger\obj\Debug\net5.0\Logger.AssemblyInfo.cs
+D:\Practice\ASA\COMS\COMS\Logger\obj\Debug\net5.0\Logger.csproj.CoreCompileInputs.cache
+D:\Practice\ASA\COMS\COMS\Logger\obj\Debug\net5.0\Logger.dll
+D:\Practice\ASA\COMS\COMS\Logger\obj\Debug\net5.0\refint\Logger.dll
+D:\Practice\ASA\COMS\COMS\Logger\obj\Debug\net5.0\Logger.pdb
+D:\Practice\ASA\COMS\COMS\Logger\obj\Debug\net5.0\ref\Logger.dll
