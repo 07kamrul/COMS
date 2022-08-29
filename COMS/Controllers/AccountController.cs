@@ -76,6 +76,21 @@ namespace COMS.Controllers
             }
         }
 
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetAccountsByProject/{id}")]
+        public List<AccountResponse> GetAccountsByProject(int id)
+        {
+            _logger.Information("Get all Accounts started.");
+            try
+            {
+                return _accountService.GetAccountsByProject(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
 
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
@@ -137,9 +152,9 @@ namespace COMS.Controllers
             _logger.Information("Save Account started");
             try
             {
-                if (account.MemberId == 0 || account.OpaningDate == null || account.PayableAmounts == 0)
+                if (account.MemberId == 0 || account.ProjectId == 0 || account.PayableAmounts == 0)
                 {
-                    throw new BadHttpRequestException("This Email or Code or Phone invalid.");
+                    throw new BadHttpRequestException("This Member or Project or Payable amount are invalid.");
                 }
 
                 return _accountService.SaveAccount(account);

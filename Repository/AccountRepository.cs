@@ -22,5 +22,25 @@ namespace Repository
         {
             return _context.Accounts.AsNoTracking().Where(x => x.MemberId == id).ToList();
         }
+
+        public List<Account> GetAccountsByProject(int id)
+        {
+            return _context.Accounts.AsNoTracking().Where(x => x.ProjectId == id).ToList();
+        }
+
+        public List<Account> GetInactiveAccounts()
+        {
+            return _context.Accounts.AsNoTracking().Where(x => !x.IsActive).ToList();
+        }
+
+        public List<Account> GetRequestVerifyAccounts()
+        {
+            return _context.Accounts.AsNoTracking().Where(x => !x.IsVerified).ToList();
+        }
+
+        public List<Account> GetVerifiedAccounts()
+        {
+            return _context.Accounts.AsNoTracking().Where(x => x.IsVerified).ToList();
+        }
     }
 }

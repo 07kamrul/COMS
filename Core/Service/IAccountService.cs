@@ -18,5 +18,6 @@ namespace Core.Service
         List<AccountResponse> GetRequestVerifyAccounts();
         AccountResponse SaveAccount(AccountRequest account);
         void DeleteAccount(int id);
+        List<AccountResponse> GetAccountsByProject(int id);
     }
 }

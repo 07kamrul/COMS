@@ -182,11 +182,12 @@ namespace Service
                             transaction.InstallmentNo = installment;
                             transaction.TransactionAmounts = payableAmounts;
                             transaction.TransactionDate = transactionDate.AddMonths(installment);
+                            transaction.DueAmounts = 0;
+
                             if (installment == numofInstallment)
                             {
                                 transaction.DueAmounts = Math.Abs(amounts - transactionAmounts);
                             }
-                            transaction.DueAmounts = 0;
 
                             saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
                         }
@@ -217,14 +218,18 @@ namespace Service
             }
 
             var getMemberAccount = getMemberAccounts.FirstOrDefault(x => x.Id == transaction.AccountId);
+            
             getMemberAccount.TotalAmounts = GetTransactionsByMemberId(memberId)
                 .Where(d => d.TransactionType == TransactionType.Deposit).Sum(x => x.TransactionAmounts)
                 - GetTransactionsByMemberId(memberId)
                 .Where(d => d.TransactionType == TransactionType.Withdraw).Sum(x => x.TransactionAmounts);
 
+            getMemberAccount.DueAmounts = transaction.DueAmounts;
+
             _accountService.SaveAccount(_mapper.Map<AccountRequest>(getMemberAccount));
 
             getMember.TotalAmounts = getMemberAccounts.Sum(x => x.TotalAmounts);
+            
             _memberService.SaveMember(_mapper.Map<MemberRequest>(getMember));
 
             return _mapper.Map<TransactionResponse>(saveTransaction);

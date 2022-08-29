@@ -51,25 +51,52 @@ namespace Service
 
         public List<AccountResponse> GetInactiveAccounts()
         {
-            return null;
+            List<Account> accountsByMember = _accountRepository.GetInactiveAccounts();
+            return _mapper.Map<List<AccountResponse>>(accountsByMember);
         }
 
         public List<AccountResponse> GetRequestVerifyAccounts()
         {
-            return null;
+            List<Account> accountsByMember = _accountRepository.GetRequestVerifyAccounts();
+            return _mapper.Map<List<AccountResponse>>(accountsByMember);
         }
 
         public List<AccountResponse> GetVerifiedAccounts()
         {
-            return null;
+            List<Account> accountsByMember = _accountRepository.GetVerifiedAccounts();
+            return _mapper.Map<List<AccountResponse>>(accountsByMember);
         }
 
-        public AccountResponse SaveAccount(AccountRequest account)
+        public List<AccountResponse> GetAccountsByProject(int id)
         {
-            return null;
+            List<Account> accountsByMember = _accountRepository.GetAccountsByProject(id);
+            return _mapper.Map<List<AccountResponse>>(accountsByMember);
         }
+
+        public AccountResponse SaveAccount(AccountRequest accountModel)
+        {
+            Account existingAccount = _accountRepository.FindBy(x => x.MemberId == accountModel.MemberId 
+                    || x.ProjectId == accountModel.ProjectId).FirstOrDefault();
+
+            Account account = _mapper.Map<Account>(accountModel);
+            account.MemberId = accountModel.MemberId;
+            account.ProjectId = accountModel.ProjectId;
+            account.IsActive = true;
+
+            if (existingAccount == null)
+            {
+                account.Id = 0;
+                return _mapper.Map<AccountResponse>(_accountRepository.Add(account));
+            }
+
+            account.Id = existingAccount.Id;
+            return _mapper.Map<AccountResponse>(account);
+        }
+
         public void DeleteAccount(int id)
         {
+            _accountRepository.Delete(_accountRepository.GetById(id));
         }
+
     }
 }

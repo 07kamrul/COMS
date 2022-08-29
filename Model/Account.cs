@@ -19,7 +19,7 @@ namespace Model
         public double DueAmounts { get; set; }
         public double PayableAmounts { get; set; }
         public double TotalAmounts { get; set; }
-        public int IsVerified { get; set; }
+        public bool IsVerified { get; set; }
         public string VerifiedBy { get; set; }
         public DateTime VerificationDate { get; set; }
     }
