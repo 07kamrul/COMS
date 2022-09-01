@@ -228,7 +228,7 @@ namespace Service
 
             _accountService.SaveAccount(_mapper.Map<AccountRequest>(getMemberAccount));
 
-            getMember.TotalAmounts = getMemberAccounts.Sum(x => x.TotalAmounts);
+            getMember.TotalAmounts = (decimal?)getMemberAccounts.Sum(x => x.TotalAmounts);
             
             _memberService.SaveMember(_mapper.Map<MemberRequest>(getMember));
 
@@ -247,7 +247,7 @@ namespace Service
 
             _accountService.SaveAccount(_mapper.Map<AccountRequest>(memberAccountInfo));
 
-            getMember.TotalAmounts = getMemberAccounts.Sum(x => x.TotalAmounts);
+            getMember.TotalAmounts = (decimal?)getMemberAccounts.Sum(x => x.TotalAmounts);
 
             _memberService.SaveMember(_mapper.Map<MemberRequest>(getMember));
 

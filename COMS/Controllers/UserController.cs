@@ -67,7 +67,7 @@ namespace COMS.Controllers
 
                 if (_userService.IsExistingUser(userRequestModel.Email))
                 {
-                    throw new BadHttpRequestException("This email is already in use.");
+                    throw new BadHttpRequestException("This email or member id is already in use.");
                 }
 
                 userRequestModel.Password = CryptoService.EncryptText(userRequestModel.Password);
@@ -240,7 +240,7 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetUser/{id}")]
+        [HttpGet("GetUserById/{id}")]
         public UserResponse GetUserById(int id)
         {
             try
@@ -287,7 +287,7 @@ namespace COMS.Controllers
             }
         }
 
-        [ClaimRequirement(PermissionType.Admin)]
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("GetAllUsers")]
         public List<UserResponse> GetAllUsers()
         {

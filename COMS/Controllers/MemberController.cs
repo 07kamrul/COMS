@@ -29,7 +29,7 @@ namespace COMS.Controllers
 
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetMember")]
+        [HttpGet("GetMember/{id}")]
         public MemberResponse GetMember(int Id)
         {
             _logger.Information("Get all member started.");
@@ -70,6 +70,22 @@ namespace COMS.Controllers
             try
             {
                 return _memberService.GetInactiveMembers();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetActiveMembers")]
+        public List<MemberResponse> GetActiveMembers()
+        {
+            _logger.Information("Get inactive members started.");
+            try
+            {
+                return _memberService.GetActiveMembers();
             }
             catch (Exception ex)
             {
@@ -149,6 +165,29 @@ namespace COMS.Controllers
                 }
 
                 return _memberService.SaveMember(member);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpPost("VerifyMember")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public MemberResponse VerifyMember([FromBody] MemberVerifyRequest member)
+        {
+            _logger.Information("Verify member started");
+            try
+            {
+                if (member.MemberId == 0)
+                {
+                    throw new BadHttpRequestException("This member invalid.");
+                }
+
+                return _memberService.VerifyMember(member);
             }
             catch (Exception ex)
             {

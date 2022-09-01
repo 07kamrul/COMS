@@ -19,10 +19,11 @@ namespace Core.Service
         void DeleteMember(int id);
         void UpdateMember(MemberRequest memberRequestModel);
         Stream GetAttachmentFile(int id);
-        void VerifyMember(int memberId, bool isVerify);
         bool IsExistingMember(string email, int code, string phone, long nid);
         List<MemberResponse> GetVerifiedMembers();
         List<MemberResponse> GetRequestVerifyMembers();
         List<MemberResponse> GetInactiveMembers();
+        List<MemberResponse> GetActiveMembers();
+        MemberResponse VerifyMember(MemberVerifyRequest member);
     }
 }

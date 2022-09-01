@@ -23,6 +23,8 @@ namespace Service
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IFileStore _fileStore;
         private readonly IConfiguration _configuration;
+        private IUserResolverService _User = null;
+
 
         public MemberService(IMapper mapper, IMemberRepository memberRepository, IAttachmentRepository attachmentRepository,
             IConfiguration configuration, IFileStore fileStore)
@@ -41,7 +43,7 @@ namespace Service
 
         public List<MemberResponse> GetMembers()
         {
-            var getMembers = _memberRepository.GetAll().Where(x => x.IsActive);
+            var getMembers = _memberRepository.GetAll();
             return _mapper.Map<List<MemberResponse>>(getMembers);
         }
 
@@ -103,13 +105,16 @@ namespace Service
             }
         }
 
-        public void VerifyMember(int memberId, bool isVerify)
+        public MemberResponse VerifyMember(MemberVerifyRequest member)
         {
-            Member members = _memberRepository.GetById(memberId);
-            members.IsVerified = isVerify;
+            Member members = _memberRepository.GetById(member.MemberId);
+            members.IsVerified = member.IsVerified;
             members.VerificationDate = DateTime.Now;
-            _memberRepository.Update(members);
+            members.VerifiedBy = member.VerifiedBy;
+
+            return _mapper.Map<MemberResponse>(_memberRepository.Update(members));
         }
+
 
         public List<MemberResponse> GetVerifiedMembers()
         {
@@ -128,5 +133,12 @@ namespace Service
             var getInactiveMembers = _memberRepository.GetAll().Where(x => !x.IsActive);
             return _mapper.Map<List<MemberResponse>>(getInactiveMembers);
         }
+
+        public List<MemberResponse> GetActiveMembers()
+        {
+            var getInactiveMembers = _memberRepository.GetAll().Where(x => x.IsActive);
+            return _mapper.Map<List<MemberResponse>>(getInactiveMembers);
+        }
+
     }
 }

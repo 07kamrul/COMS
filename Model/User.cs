@@ -5,7 +5,7 @@ namespace Model
     public class User : BaseEntity
     {
         public string Email { get; set; }
-        public int MemberId { get; set; }
+        public int? MemberId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Phone { get; set; }

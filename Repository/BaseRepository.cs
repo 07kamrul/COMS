@@ -26,7 +26,7 @@ namespace Repository
 
         public virtual IQueryable<T> GetAll()
         {
-            IQueryable<T> query = _Entities.AsNoTracking().AsQueryable<T>().Where(x => x.IsActive == true);
+            IQueryable<T> query = _Entities.AsNoTracking().AsQueryable<T>().Where(x => x.IsActive || !x.IsActive);
             return query;
         }
 
@@ -65,7 +65,7 @@ namespace Repository
             entity.CreationDate = DateTime.UtcNow;
             int userId;
             int.TryParse(_User.GetUser(), out userId);
-            entity.CreatedBy = (userId == 0 ? null : userId);
+            entity.CreatedBy = (userId == 0 ? 0 : userId);
             _Context.SaveChanges();
             return entity;
         }
@@ -90,7 +90,7 @@ namespace Repository
             entity.ModificationDate = DateTime.UtcNow;
             int userId;
             int.TryParse(_User.GetUser(), out userId);
-            entity.ModifiedBy = (userId == 0 ? null : userId);
+            entity.ModifiedBy = (userId == 0 ? 0 : userId);
 
             _Context.Entry(entity).State = EntityState.Modified;
             _Context.Entry(entity).Property(x => x.CreationDate).IsModified = false;

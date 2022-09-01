@@ -1,0 +1,29 @@
+http: //localhost:5001/api/Member/SaveMember
+
+
+{
+  "Code":101,
+  "Name":"Kamrul",
+  "FatherName":"AK",
+  "MotherName":"HB",
+  "JoiningDate":"2021-09-02",
+  "DateOfBirth":"1996-09-02",
+  "NID":3706038407,
+  "ProjectId": 0,
+  "NumberOfAccount": 0,
+  "TotalAmounts": 0.0,
+  "Phone":"01758290421",
+  "Email":"kamrul@gmail.com",
+  "Gender":"Male",
+  "Nationality":"Bangladeshi",
+  "PresentAddress":"Mirpur, Dhaka, Bangladesh",
+  "PermanentAddress":"Mirpur, Dhaka, Bangladesh",
+  "MaritalStatus":"Single",
+  "Religion":"Islam",
+  "Occupation":"Private Service",
+  "Designation":"Software",
+  "Company":"ASA",
+  "IsVerified": false,
+  "VerifiedBy": 0,
+  "VerificationDate":"2022-01-01"
+}

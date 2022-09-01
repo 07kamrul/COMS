@@ -1,0 +1,38 @@
+http://localhost:5001/api/Member/VerifyMember
+
+Request Body:
+{
+	"MemberId": 1,
+	"IsVerified": true,
+	"VerifiedBy": 1
+}
+
+Response Body:
+{
+    "id": 1,
+    "code": 101,
+    "name": "Kamrul",
+    "fatherName": "AK",
+    "motherName": "HB",
+    "joiningDate": "2021-09-02T00:00:00",
+    "dateOfBirth": "1996-09-02T00:00:00",
+    "nid": 3706038407,
+    "phone": "1758290421",
+    "email": "kamrul@gmail.com",
+    "gender": "Male",
+    "nationality": "Bangladeshi",
+    "projectId": 0,
+    "numberOfAccount": 0,
+    "totalAmounts": 100,
+    "presentAddress": "Mirpur, Dhaka, Bangladesh",
+    "permanentAddress": "Mirpur, Dhaka, Bangladesh",
+    "maritalStatus": "Single",
+    "religion": "Islam",
+    "occupation": "Private Service",
+    "designation": "Software",
+    "company": "ASA",
+    "isVerified": true,
+    "verifiedBy": 1,
+    "verificationDate": "2022-09-01T14:57:04.0684003+06:00",
+    "attachments": []
+}
