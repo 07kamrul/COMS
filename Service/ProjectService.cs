@@ -46,7 +46,7 @@ namespace Service
 
         public ProjectResponse SaveProject(ProjectRequest projectModel)
         {
-            Project existingMember = _projectRepository.FindBy(x => x.StartDate == projectModel.StartDate
+            Project existingProject = _projectRepository.FindBy(x => x.StartDate == projectModel.StartDate
                 || x.EndDate == projectModel.EndDate).FirstOrDefault();
 
             Project project = _mapper.Map<Project>(projectModel);
@@ -54,13 +54,13 @@ namespace Service
             project.EndDate = projectModel.EndDate;
             project.IsActive = true;
 
-            if (existingMember == null)
+            if (existingProject == null)
             {
                 project.Id = 0;
                 return _mapper.Map<ProjectResponse>(_projectRepository.Add(project));
             }
 
-            project.Id = existingMember.Id;
+            project.Id = existingProject.Id;
             return _mapper.Map<ProjectResponse>(project);
         }
 
