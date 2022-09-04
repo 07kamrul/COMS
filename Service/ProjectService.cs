@@ -44,6 +44,16 @@ namespace Service
 
         }
 
+        public List<ProjectResponse> GetActiveProjects()
+        {
+            return _mapper.Map<List<ProjectResponse>>(_projectRepository.GetAll().Where(x => x.IsActive));
+        }
+
+        public List<ProjectResponse> GetInActiveProjects()
+        {
+            return _mapper.Map<List<ProjectResponse>>(_projectRepository.GetAll().Where(x => !x.IsActive));
+        }
+
         public ProjectResponse SaveProject(ProjectRequest projectModel)
         {
             Project existingProject = _projectRepository.FindBy(x => x.StartDate == projectModel.StartDate

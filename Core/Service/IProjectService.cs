@@ -14,5 +14,7 @@ namespace Core.Service
         ProjectResponse GetProject(int id);
         ProjectResponse SaveProject(ProjectRequest project);
         void DeleteProject(int id);
+        List<ProjectResponse> GetActiveProjects();
+        List<ProjectResponse> GetInActiveProjects();
     }
 }

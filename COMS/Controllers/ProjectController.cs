@@ -65,6 +65,38 @@ namespace COMS.Controllers
 
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetActiveProjects")]
+        public List<ProjectResponse> GetActiveProjects()
+        {
+            _logger.Information("Get all Projects started.");
+            try
+            {
+                return _projectService.GetActiveProjects();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [HttpGet("GetInActiveProjects")]
+        public List<ProjectResponse> GetInActiveProjects()
+        {
+            _logger.Information("Get all Projects started.");
+            try
+            {
+                return _projectService.GetInActiveProjects();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex.Message);
+                throw;
+            }
+        }
+
+        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPost("SaveProject")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public ProjectResponse SaveProject([FromBody] ProjectRequest project)
