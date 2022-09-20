@@ -1,17 +1,25 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
+using Core;
 using Core.Common;
 using Core.FileStore;
 using Core.Repository;
 using Core.RequestModels;
 using Core.Service;
 using Core.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Model;
+using Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
+using Transaction = Model.Transaction;
+
 
 namespace Service
 {
@@ -25,11 +33,13 @@ namespace Service
         private readonly IProjectService _projectService;
         private readonly IAccountService _accountService;
         private readonly IMemberService _memberService;
+        private readonly MCLDBContext _context;
 
         public TransactionService(IMapper mapper, ITransactionRepository transactionRepository,
             IAttachmentRepository attachmentRepository, IFileStore fileStore,
             IConfiguration configuration, IProjectService projectService,
-            IAccountService accountService, IMemberService memberService)
+            IAccountService accountService, IMemberService memberService,
+            MCLDBContext context)
         {
             _mapper = mapper;
             _transactionRepository = transactionRepository;
@@ -39,6 +49,7 @@ namespace Service
             _projectService = projectService;
             _accountService = accountService;
             _memberService = memberService;
+            _context = context;
         }
 
 
@@ -94,146 +105,186 @@ namespace Service
             return false;        
         }
 
+        private TransactionResponse SaveData(Transaction transaction)
+        {
+            using (var ts = new TransactionScope())
+            {
+                using (var context = _context)
+                {
+                    try
+                    {
+                        if (transaction != null)
+                        {
+                            _transactionRepository.Add(transaction);
+                        }
+
+                        var memberInfo = _memberService.GetMember(transaction.MemberId);
+                        var memberAccountsInfo = _accountService.GetAccountsByMember(transaction.MemberId);
+                        var memberAccountInfo = memberAccountsInfo.FirstOrDefault(x => x.Id == transaction.AccountId);
+
+                        memberAccountInfo.TotalAmounts = GetTransactionsByMemberId(transaction.MemberId)
+                            .Where(d => d.TransactionType == TransactionType.Deposit).Sum(x => x.TransactionAmounts)
+                            - GetTransactionsByMemberId(transaction.MemberId)
+                            .Where(d => d.TransactionType == TransactionType.Withdraw).Sum(x => x.TransactionAmounts);
+
+                        memberAccountInfo.DueAmounts = transaction.DueAmounts;
+
+                        var accountTransaction = _mapper.Map<AccountRequest>(memberAccountInfo);
+                        var updateAcountTransaction = _accountService.SaveAccount(accountTransaction);
+
+                        memberInfo.TotalAmounts = (decimal?)memberAccountsInfo.Sum(x => x.TotalAmounts);
+
+                        var memberTransaction = _mapper.Map<MemberRequest>(memberInfo);
+                        var updateMemberTransaction = _memberService.SaveMember(memberTransaction);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        ts.Dispose();
+                        throw new Exception(ex.Message);
+                    }
+                }
+                ts.Complete();
+            }
+            throw new Exception("Save Transaction.");
+        }
 
         public TransactionResponse SaveTransaction(TransactionRequest transaction)
         {
+            Transaction saveTransactions = new Transaction();
+
+            var memberId = transaction.MemberId;
+            var memberAllTransaction = GetTransactionsByMemberId(memberId);
+            var depositAmount = memberAllTransaction
+                .Where(d => d.AccountId == transaction.AccountId 
+                && d.TransactionType == TransactionType.Deposit)
+                .Sum(s => s.TransactionAmounts);
+
+            if (transaction.TransactionType == TransactionType.Deposit)
+            {
+                saveTransactions = DepositTransaction(transaction, memberAllTransaction);
+            }
+
+            if (transaction.TransactionType == TransactionType.Withdraw)
+            {
+                var withdrawTransaction = new Transaction();
+                if (transaction.TransactionAmounts == depositAmount)
+                {
+                    saveTransactions = _mapper.Map<Transaction>(transaction);
+                }
+                saveTransactions = _mapper.Map<Transaction>(transaction);
+            }
+
+            if (transaction.TransactionType == TransactionType.Cost)
+            {
+                saveTransactions = _mapper.Map<Transaction>(transaction);
+            }
+
+
+            return SaveData(saveTransactions);
+        }
+
+
+        public Transaction DepositTransaction(TransactionRequest transaction, 
+            List<TransactionResponse> memberAllTransaction)
+        {
+            int numOfMonths = 0;
+            var projectInfo = _projectService.GetProject(transaction.ProjectId);
             var transactionDate = transaction.TransactionDate;
             var dueAmounts = transaction.DueAmounts;
             var payableAmounts = transaction.PayableAmounts;
             var transactionAmounts = transaction.TransactionAmounts;
-            var memberId = transaction.MemberId;
-            var projectId = transaction.ProjectId;
-            int numOfMonths = 0;
 
-            Transaction saveTransaction = new Transaction();
-            var getMemberAccounts = _accountService.GetAccountsByMember(memberId);
-            var memberAllTransaction = GetTransactionsByMemberId(memberId);
-            var depositAmount = memberAllTransaction
-                .Where(d => d.AccountId == transaction.AccountId && d.TransactionType == TransactionType.Deposit)
-                .Sum(s => s.TransactionAmounts);
-            var projectInfo = _projectService.GetProject(projectId);
-            var getMember = _memberService.GetMember(memberId);
-            var projectStartDate = projectInfo.StartDate;
-
-            if (transaction.TransactionType == TransactionType.Deposit)
+            //For First Installment
+            if (memberAllTransaction == null)
             {
-                //For First Installment
-                if (memberAllTransaction == null)
+                numOfMonths = Math.Abs(12 * (transaction.TransactionDate.Date.Year - projectInfo.StartDate.Date.Year)
+                        + transaction.TransactionDate.Date.Month - projectInfo.StartDate.Date.Month);
+
+                var amounts = payableAmounts * numOfMonths;
+
+                var partialAmounts = transactionAmounts % payableAmounts;
+                var monthlyAmounts = transactionAmounts - partialAmounts;
+                int numofInstallment = (int)(monthlyAmounts / numOfMonths);
+
+                if (transactionAmounts <= amounts)
                 {
-                    numOfMonths = Math.Abs(12 * (transactionDate.Year - projectStartDate.Date.Year)
-                            + transactionDate.Month - projectStartDate.Date.Month);
-
-                    var amounts = payableAmounts * numOfMonths;
-
-                    var partialAmounts = transactionAmounts % payableAmounts;
-                    var monthlyAmounts = transactionAmounts - partialAmounts;
-                    int numofInstallment = (int)(monthlyAmounts / numOfMonths);
-
-                    if (transactionAmounts <= amounts)
+                    for (int installment = 0; installment <= numofInstallment; installment++)
                     {
-                        for (int installment = 0; installment <= numofInstallment; installment++)
+                        transaction.InstallmentNo = installment;
+                        transaction.TransactionAmounts = payableAmounts;
+                        transaction.TransactionDate = transactionDate.AddMonths(installment);
+
+                        if (installment == numofInstallment)
                         {
-                            transaction.InstallmentNo = installment;
-                            transaction.TransactionAmounts = payableAmounts;
-                            transaction.TransactionDate = transactionDate.AddMonths(installment);
-
-                            if (installment == numofInstallment)
-                            {
-                                transaction.DueAmounts = Math.Abs(amounts - transactionAmounts);
-                            }
-                            transaction.DueAmounts = 0;
-
-                            saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
+                            transaction.DueAmounts = Math.Abs(amounts - transactionAmounts);
                         }
+                        transaction.DueAmounts = 0;
+
+                        return _mapper.Map<Transaction>(transaction);
                     }
-                    else if (transactionAmounts >= amounts)
-                    {
-                        for (int installment = 0; installment <= numofInstallment; installment++)
-                        {
-                            transaction.InstallmentNo = installment;
-                            transaction.TransactionAmounts = payableAmounts;
-                            transaction.TransactionDate = transactionDate.AddMonths(installment);
-
-                            saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
-                        }
-                    }                  
                 }
-                //For Second or other Installment
+                else if (transactionAmounts >= amounts)
+                {
+                    for (int installment = 0; installment <= numofInstallment; installment++)
+                    {
+                        transaction.InstallmentNo = installment;
+                        transaction.TransactionAmounts = payableAmounts;
+                        transaction.TransactionDate = transactionDate.AddMonths(installment);
+
+                        return _mapper.Map<Transaction>(transaction);
+                    }
+                }
+            }
+            //For Second or other Installment
+            else
+            {
+                var memberLastTransaction = memberAllTransaction
+                    .OrderByDescending(x => x.TransactionDate).FirstOrDefault();
+
+                var lastTransactionDate = memberLastTransaction.TransactionDate;
+
+                numOfMonths = Math.Abs(12 * (transactionDate.Year - lastTransactionDate.Date.Year)
+                    + transactionDate.Month - lastTransactionDate.Date.Month);
+
+                var amounts = payableAmounts * numOfMonths;
+
+                var partialAmounts = transactionAmounts % payableAmounts;
+                var monthlyAmounts = transactionAmounts - partialAmounts;
+                int numofInstallment = (int)(monthlyAmounts / numOfMonths);
+
+                if (transactionAmounts <= amounts)
+                {
+                    for (int installment = 0; installment <= numofInstallment; installment++)
+                    {
+                        transaction.InstallmentNo = installment;
+                        transaction.TransactionAmounts = payableAmounts;
+                        transaction.TransactionDate = transactionDate.AddMonths(installment);
+                        transaction.DueAmounts = 0;
+
+                        if (installment == numofInstallment)
+                        {
+                            transaction.DueAmounts = Math.Abs(amounts - transactionAmounts);
+                        }
+
+                        return _mapper.Map<Transaction>(transaction);
+                    }
+                }
                 else
                 {
-                    var memberLastTransaction = memberAllTransaction
-                        .OrderByDescending(x => x.TransactionDate).FirstOrDefault();
-
-                    var lastTransactionDate = memberLastTransaction.TransactionDate;
-
-                    numOfMonths = Math.Abs(12 * (transactionDate.Year - lastTransactionDate.Date.Year)
-                        + transactionDate.Month - lastTransactionDate.Date.Month);
-
-                    var amounts = payableAmounts * numOfMonths;
-
-                    var partialAmounts = transactionAmounts % payableAmounts;
-                    var monthlyAmounts = transactionAmounts - partialAmounts;
-                    int numofInstallment = (int)(monthlyAmounts / numOfMonths);
-
-                    if (transactionAmounts <= amounts)
+                    for (int installment = 0; installment <= numofInstallment; installment++)
                     {
-                        for (int installment = 0; installment <= numofInstallment; installment++)
-                        {
-                            transaction.InstallmentNo = installment;
-                            transaction.TransactionAmounts = payableAmounts;
-                            transaction.TransactionDate = transactionDate.AddMonths(installment);
-                            transaction.DueAmounts = 0;
+                        transaction.InstallmentNo = installment;
+                        transaction.TransactionAmounts = payableAmounts;
+                        transaction.TransactionDate = transactionDate.AddMonths(installment);
 
-                            if (installment == numofInstallment)
-                            {
-                                transaction.DueAmounts = Math.Abs(amounts - transactionAmounts);
-                            }
-
-                            saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
-                        }
+                        return _mapper.Map<Transaction>(transaction);
                     }
-                    else
-                    {
-                        for (int installment = 0; installment <= numofInstallment; installment++)
-                        {
-                            transaction.InstallmentNo = installment;
-                            transaction.TransactionAmounts = payableAmounts;
-                            transaction.TransactionDate = transactionDate.AddMonths(installment);
-
-                            saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
-                        }
-                    }                   
                 }
             }
-            else if (transaction.TransactionType == TransactionType.Withdraw)
-            {
-                if (transaction.TransactionAmounts == depositAmount)
-                {
-                    saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
-                }
-            }
-            else if (transaction.TransactionType == TransactionType.Cost)
-            {
-                saveTransaction = _transactionRepository.Add(_mapper.Map<Transaction>(transaction));
-            }
-
-            var getMemberAccount = getMemberAccounts.FirstOrDefault(x => x.Id == transaction.AccountId);
-            
-            getMemberAccount.TotalAmounts = GetTransactionsByMemberId(memberId)
-                .Where(d => d.TransactionType == TransactionType.Deposit).Sum(x => x.TransactionAmounts)
-                - GetTransactionsByMemberId(memberId)
-                .Where(d => d.TransactionType == TransactionType.Withdraw).Sum(x => x.TransactionAmounts);
-
-            getMemberAccount.DueAmounts = transaction.DueAmounts;
-
-            _accountService.SaveAccount(_mapper.Map<AccountRequest>(getMemberAccount));
-
-            getMember.TotalAmounts = (decimal?)getMemberAccounts.Sum(x => x.TotalAmounts);
-            
-            _memberService.SaveMember(_mapper.Map<MemberRequest>(getMember));
-
-            return _mapper.Map<TransactionResponse>(saveTransaction);
+            return null;
         }
+
         public void DeleteTransaction(int id)
         {
             var transactionInfo = GetTransaction(id);
