@@ -27,7 +27,7 @@ namespace COMS.Controllers
         }
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
-        [HttpGet("GetAccount")]
+        [HttpGet("GetAccount/{id}")]
         public AccountResponse GetAccount(int Id)
         {
             _logger.Information("Get all Account started.");

@@ -9,6 +9,7 @@ namespace Core.ViewModels
     public class AccountResponse
     {
         public int Id { get; set; }
+        public string AccountName { get; set; }
         public int MemberId { get; set; }
         public int ProjectId { get; set; }
         public DateTime OpaningDate { get; set; }

@@ -76,7 +76,7 @@ namespace Service
         public AccountResponse SaveAccount(AccountRequest accountModel)
         {
             Account existingAccount = _accountRepository.FindBy(x => x.MemberId == accountModel.MemberId 
-                    || x.ProjectId == accountModel.ProjectId).FirstOrDefault();
+                    && x.ProjectId == accountModel.ProjectId).FirstOrDefault();
 
             Account account = _mapper.Map<Account>(accountModel);
             account.MemberId = accountModel.MemberId;
