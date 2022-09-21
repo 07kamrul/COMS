@@ -17,11 +17,11 @@ namespace Model
         public int ProjectId { get; set; }
         public DateTime OpaningDate { get; set; }
         public DateTime? ClosingDate { get; set; }
-        public double? DueAmounts { get; set; }
-        public double PayableAmounts { get; set; }
-        public double? TotalAmounts { get; set; }
+        public decimal? DueAmounts { get; set; }
+        public decimal PayableAmounts { get; set; }
+        public decimal? TotalAmounts { get; set; }
         public bool IsVerified { get; set; }
-        public string? VerifiedBy { get; set; }
+        public int? VerifiedBy { get; set; }
         public DateTime? VerificationDate { get; set; }
     }
 }
