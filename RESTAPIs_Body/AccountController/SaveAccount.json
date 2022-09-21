@@ -1,0 +1,15 @@
+http://localhost:5001/api/Account/SaveAccount
+
+{
+	"AccountName" : "Kamrul",
+	"MemberId" : 1,
+	"ProjectId" : 1,
+	"OpaningDate" : "2022-01-01",
+	"ClosingDate" : "2025-01-01",
+	"DueAmounts" : 0,
+	"PayableAmounts" : 1000,
+	"TotalAmounts" : 0,
+	"IsVerified" : false,
+	"VerifiedBy" : 0,
+	"VerificationDate" : "2022-01-01"
+}

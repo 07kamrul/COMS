@@ -1,0 +1,16 @@
+http://localhost:5001/api/Account/UpdateAccount
+
+{
+	"Id" : 1,
+	"AccountName" : "Kamrul",
+	"MemberId" : 1,
+	"ProjectId" : 1,
+	"OpaningDate" : "2022-01-01",
+	"ClosingDate" : "2025-01-01",
+	"DueAmounts" : 0,
+	"PayableAmounts" : 1000,
+	"TotalAmounts" : 0,
+	"IsVerified" : true,
+	"VerifiedBy" : 1,
+	"VerificationDate" : "2022-01-01"
+}

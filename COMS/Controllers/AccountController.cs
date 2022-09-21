@@ -170,7 +170,7 @@ namespace COMS.Controllers
         [ClaimRequirement(PermissionType.Maker, PermissionType.Admin)]
         [HttpPut("UpdateAccount")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public ActionResult UpdateAccount([FromBody] AccountRequest account)
+        public AccountResponse UpdateAccount([FromBody] AccountRequest account)
         {
             _logger.Information($"Updating Account: {account.MemberId}");
             try
@@ -180,15 +180,18 @@ namespace COMS.Controllers
                     throw new BadHttpRequestException("Invalid request.");
                 }
 
-                _accountService.SaveAccount(account);
+                if (account.Id == 0)
+                {
+                    throw new BadHttpRequestException("Invalid account id.");
+                }
 
                 _logger.Information($"Successfully updated Account: {account.MemberId}");
-                return Ok();
+                return _accountService.SaveAccount(account);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.StackTrace);
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                _logger.Error(ex.Message);
+                throw;
             }
         }
 

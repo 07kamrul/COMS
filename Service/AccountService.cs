@@ -75,7 +75,7 @@ namespace Service
 
         public AccountResponse SaveAccount(AccountRequest accountModel)
         {
-            Account existingAccount = _accountRepository.FindBy(x => x.MemberId == accountModel.MemberId 
+            Account existingAccount = _accountRepository.FindBy(x => x.Id == accountModel.Id && x.MemberId == accountModel.MemberId 
                     && x.ProjectId == accountModel.ProjectId).FirstOrDefault();
 
             Account account = _mapper.Map<Account>(accountModel);
@@ -88,9 +88,26 @@ namespace Service
                 account.Id = 0;
                 return _mapper.Map<AccountResponse>(_accountRepository.Add(account));
             }
+            else
+            {
+                account.Id = existingAccount.Id;
+                
+                account.ProjectId = accountModel.ProjectId;
+                account.MemberId = accountModel.MemberId;
+                account.AccountName = accountModel.AccountName;
+                account.OpaningDate = accountModel.OpaningDate;
+                account.ClosingDate = accountModel.ClosingDate;
+                account.DueAmounts = (decimal?)accountModel.DueAmounts;
+                account.PayableAmounts = (decimal)accountModel.PayableAmounts;
+                account.TotalAmounts = (decimal?)accountModel.TotalAmounts;
+                account.IsVerified = accountModel.IsVerified;
+                account.VerifiedBy = accountModel.VerifiedBy;
+                account.VerificationDate = accountModel.VerificationDate;
 
-            account.Id = existingAccount.Id;
-            return _mapper.Map<AccountResponse>(account);
+                _accountRepository.Update(account);
+
+                return _mapper.Map<AccountResponse>(account);
+            }
         }
 
         public void DeleteAccount(int id)
