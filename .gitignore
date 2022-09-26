@@ -24,3 +24,10 @@
 /Service/bin
 /Service/obj/Debug
 /Service/obj
+/Core/obj
+/COMS.Core/obj
+/Logger/obj
+/Model/obj
+/Repository/obj
+/Service/obj
+/Service/bin
