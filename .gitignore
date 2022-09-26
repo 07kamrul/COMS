@@ -1,0 +1,26 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Core/bin
+/Core/obj/Debug
+/Core/obj/Release/net5.0
+/Logger/bin/Debug
+/Logger/obj/Debug
+/Logger/obj/Release/net5.0
+/Model/bin
+/Model/obj/Debug
+/Model/obj/Release/net5.0
+/Repository/bin
+/Repository/obj/Debug
+/Repository/obj/Release/net5.0
+/.vs
+/.vs
+/COMS.Core/obj
+/Core/obj
+/Logger/obj
+/Model/obj
+/Repository/obj
+/Service/bin
+/Service/obj/Debug
+/Service/obj
