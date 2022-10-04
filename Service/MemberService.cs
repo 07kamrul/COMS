@@ -54,7 +54,11 @@ namespace Service
 
         public MemberResponse SaveMember(MemberRequest memberRequestModel)
         {
-            Member existingMember = _memberRepository.FindBy(x => x.Email == memberRequestModel.Email || x.Phone == memberRequestModel.Phone || x.NID == memberRequestModel.NID).FirstOrDefault();
+            Member existingMember = _memberRepository
+                .FindBy(x => x.Email == memberRequestModel.Email 
+                || x.Phone == memberRequestModel.Phone 
+                || x.NID == memberRequestModel.NID)
+                .FirstOrDefault();
 
             Member member = _mapper.Map<Member>(memberRequestModel);
             member.Email = memberRequestModel.Email;
@@ -66,9 +70,12 @@ namespace Service
                 member.Id = 0;
                 return _mapper.Map<MemberResponse>(_memberRepository.Add(member));
             }
+            else
+            {
+                existingMember = _mapper.Map<Member>(memberRequestModel);
 
-            member.Id = existingMember.Id;
-            return _mapper.Map<MemberResponse>(member);
+                return _mapper.Map<MemberResponse>(_memberRepository.Update(existingMember));
+            }
         }
 
         public Page<MemberResponse> Search(MemberSearchRequest searchModel, int skip, int take)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Core.RequestModels
 {
-    public class MemberRequest : MemberVerifyRequest
+    public class MemberRequest 
     {
         public int Id { get; set; }
         public int Code { get; set; }
@@ -19,7 +19,7 @@ namespace Core.RequestModels
         public string Nationality { get; set; }
         public int? ProjectId { get; set; }
         public int? NumberOfAccount { get; set; }
-        public decimal? TotalAmounts { get; set; }
+        public double? TotalAmounts { get; set; }
         public string PresentAddress { get; set; }
         public string PermanentAddress { get; set; }
         public string MaritalStatus { get; set; }
@@ -27,6 +27,9 @@ namespace Core.RequestModels
         public string Occupation { get; set; }
         public string Designation { get; set; }
         public string Company { get; set; }
+        public bool IsVerified { get; set; }
+        public int? VerifiedBy { get; set; }
+        public DateTime? VerificationDate { get; set; }
         public List<AttachmentRequest> Attachments { get; set; }
     }
 }

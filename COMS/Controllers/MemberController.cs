@@ -10,6 +10,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Security.Principal;
 using static Core.Common.Enums;
 
 namespace COMS.Controllers
@@ -210,6 +211,10 @@ namespace COMS.Controllers
                     throw new BadHttpRequestException("Invalid request.");
                 }
 
+                if (memberRequestModel.Id == 0)
+                {
+                    throw new BadHttpRequestException("Invalid member id.");
+                }
                 _memberService.SaveMember(memberRequestModel);
 
                 _logger.Information($"Successfully updated member: {memberRequestModel.Name}");
