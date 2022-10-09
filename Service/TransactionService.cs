@@ -139,7 +139,7 @@ namespace Service
                             var memberAccountInfo = accountDetails;
 
                             List<Transaction> memberTransactions = _mapper.Map<List<Transaction>>
-                                (_transactionRepository.GetTransactionsByMemberId(memberDetails.Id));
+                                (_transactionRepository.GetTransactionsByAccountId(accountDetails.Id));
 
                             var depositAmount = memberTransactions
                                 .Where(d => d.TransactionType == TransactionType.Deposit)
@@ -149,21 +149,19 @@ namespace Service
                                 .Where(d => d.TransactionType == TransactionType.Withdraw)
                                 .Sum(x => x.TransactionAmounts);
 
-                            var payableAmounts = memberTransactions
+                            var costAmounts = memberTransactions
+                                .Where(d => d.TransactionType == TransactionType.Cost)
+                                .Sum(x => x.TransactionAmounts);
+
+                            var dueAmounts = memberTransactions
                                 .Where(d => d.TransactionType == TransactionType.Deposit)
-                                .Sum(x => x.PayableAmounts);
-
-                            memberAccountInfo.TotalAmounts = _transactionRepository
-                                .GetAll().Where(d => d.TransactionType == TransactionType.Deposit)
-                                .Sum(ta => ta.TransactionAmounts)
-                                - _transactionRepository
-                                .GetAll().Where(d => d.TransactionType == TransactionType.Withdraw)
-                                .Sum(ta => ta.TransactionAmounts);
-
-                            memberAccountInfo.DueAmounts = _transactionRepository
-                                .GetAll().Where(d => d.TransactionType == TransactionType.Deposit)
                                 .OrderByDescending(t => t.TransactionDate)
                                 .FirstOrDefault().DueAmounts;
+
+                            memberAccountInfo.TotalAmounts = 
+                                depositAmount - withdrawAmount - costAmounts;
+
+                            memberAccountInfo.DueAmounts = dueAmounts;
                                                         
                             var accountTransaction = _mapper.Map<AccountRequest>(memberAccountInfo);
                             var updateAcountTransaction = _accountService.SaveAccount(accountTransaction);
@@ -324,10 +322,12 @@ namespace Service
                 //Last Transaction update
                 var lastTransactionDate = memberLastTransaction.TransactionDate;
                 var lastTransactionAmount = memberLastTransaction.TransactionAmounts;
-                var payLastTransactionAmount = memberLastTransaction.PayableAmounts - lastTransactionAmount;
+                var payLastTransactionAmount = 
+                    memberLastTransaction.PayableAmounts - lastTransactionAmount;
 
                 memberLastTransaction.TransactionDate = lastTransactionDate;
-                memberLastTransaction.TransactionAmounts = lastTransactionAmount + payLastTransactionAmount;
+                memberLastTransaction.TransactionAmounts = 
+                    lastTransactionAmount + payLastTransactionAmount;
                 memberLastTransaction.DueAmounts = 0;
 
                 _transactionRepository.Update(_mapper.Map<Transaction>(memberLastTransaction));

@@ -11,6 +11,7 @@ namespace Core.Repository
     {
         bool IsExistingTransaction(int memberId, DateTime transactionDate, int transactionType);
         List<Transaction> GetTransactionsByMemberId(int memberId);
+        List<Transaction> GetTransactionsByAccountId(int accountId);
         List<Transaction> GetTransactionsByProject(int projectId);
     }
 }
