@@ -85,14 +85,16 @@ namespace Service
 
         public List<TransactionResponse> GetTransactionsByMemberId(int memberId)
         {
-            List<Transaction> memberTransaction = _transactionRepository.GetTransactionsByMemberId(memberId);
+            List<Transaction> memberTransaction = _transactionRepository
+                .GetTransactionsByMemberId(memberId);
 
             return _mapper.Map<List<TransactionResponse>>(memberTransaction);
         }
 
         public List<TransactionResponse> GetTransactionsByProject(int projectId)
         {
-            List<Transaction> projectTransaction = _transactionRepository.GetTransactionsByProject(projectId);
+            List<Transaction> projectTransaction = _transactionRepository
+                .GetTransactionsByProject(projectId);
 
             return _mapper.Map<List<TransactionResponse>>(projectTransaction);
         }
@@ -136,25 +138,33 @@ namespace Service
 
                             var memberAccountInfo = accountDetails;
 
-                            List<Transaction> memberTransactions = _mapper.Map<List<Transaction>>(_transactionRepository.GetTransactionsByMemberId(memberDetails.Id));
+                            List<Transaction> memberTransactions = _mapper.Map<List<Transaction>>
+                                (_transactionRepository.GetTransactionsByMemberId(memberDetails.Id));
 
-                            var depositAmount = memberTransactions.Where(d => d.TransactionType == TransactionType.Deposit)
+                            var depositAmount = memberTransactions
+                                .Where(d => d.TransactionType == TransactionType.Deposit)
                                 .Sum(x => x.TransactionAmounts);
 
-                            var withdrawAmount = memberTransactions.Where(d => d.TransactionType == TransactionType.Withdraw)
+                            var withdrawAmount = memberTransactions
+                                .Where(d => d.TransactionType == TransactionType.Withdraw)
                                 .Sum(x => x.TransactionAmounts);
 
-                            var payableAmounts = memberTransactions.Where(d => d.TransactionType == TransactionType.Deposit)
+                            var payableAmounts = memberTransactions
+                                .Where(d => d.TransactionType == TransactionType.Deposit)
                                 .Sum(x => x.PayableAmounts);
 
-                            memberAccountInfo.TotalAmounts = _transactionRepository.GetAll().Sum(ta => ta.TransactionAmounts);
+                            memberAccountInfo.TotalAmounts = _transactionRepository
+                                .GetAll().Sum(ta => ta.TransactionAmounts);
 
-                            memberAccountInfo.DueAmounts = _transactionRepository.GetAll().OrderByDescending(t => t.TransactionDate).First().DueAmounts;
+                            memberAccountInfo.DueAmounts = _transactionRepository
+                                .GetAll().OrderByDescending(t => t.TransactionDate)
+                                .FirstOrDefault().DueAmounts;
                                                         
                             var accountTransaction = _mapper.Map<AccountRequest>(memberAccountInfo);
                             var updateAcountTransaction = _accountService.SaveAccount(accountTransaction);
 
-                            var memberAccountsInfo = _mapper.Map<List<Account>>(_accountService.GetAccountsByMember(memberDetails.Id));
+                            var memberAccountsInfo = _mapper.Map<List<Account>>
+                                (_accountService.GetAccountsByMember(memberDetails.Id));
 
                             memberDetails.NumberOfAccount = memberAccountsInfo.Count;
 
@@ -163,7 +173,6 @@ namespace Service
                             var memberTransaction = _mapper.Map<MemberRequest>(memberDetails);
                             var updateMemberTransaction = _memberService.SaveMember(memberTransaction);
                         }
-
                     }
                     catch (Exception ex)
                     {
@@ -224,7 +233,6 @@ namespace Service
             }
         }
 
-
         public List<Transaction> DepositTransaction(TransactionRequest transaction, 
             List<TransactionResponse> memberAllTransaction, Account accountDetails)
         {
@@ -270,7 +278,10 @@ namespace Service
                         }
                         else
                         {
-                            transaction.TransactionDate = depositTransaction.OrderByDescending(d => d.TransactionDate).First().TransactionDate.AddMonths(1);
+                            transaction.TransactionDate = depositTransaction
+                                .OrderByDescending(d => d.TransactionDate)
+                                .FirstOrDefault()
+                                .TransactionDate.AddMonths(1);
                         }
                         
                         if (installment == numofInstallment)
@@ -301,7 +312,8 @@ namespace Service
             else
             {
                 var memberLastTransaction = memberAllTransaction
-                    .OrderByDescending(x => x.TransactionDate).FirstOrDefault();
+                    .OrderByDescending(x => x.TransactionDate)
+                    .FirstOrDefault();
 
                 //Last Transaction update
                 var lastTransactionDate = memberLastTransaction.TransactionDate;
@@ -341,7 +353,9 @@ namespace Service
                             transaction.TransactionAmounts = payableAmounts;
                         }
 
-                        transaction.TransactionDate = memberLastTransaction.TransactionDate.AddMonths(installment);
+                        transaction.TransactionDate = memberLastTransaction
+                            .TransactionDate.AddMonths(installment);
+
                         transaction.DueAmounts = 0;
 
                         if (installment == numofInstallment)
@@ -371,7 +385,8 @@ namespace Service
                             transaction.TransactionAmounts = payableAmounts;
                         }
 
-                        transaction.TransactionDate = memberLastTransaction.TransactionDate.AddMonths(installment);
+                        transaction.TransactionDate = memberLastTransaction
+                            .TransactionDate.AddMonths(installment);
                         transaction.DueAmounts = 0;
 
                         depositTransaction.Add(_mapper.Map<Transaction>(transaction));
@@ -385,10 +400,13 @@ namespace Service
         public void DeleteTransaction(int id)
         {
             var transactionInfo = GetTransaction(id);
-            var memberAccountInfo = _accountService.GetAccountsByMember(transactionInfo.MemberId)
+            var memberAccountInfo = _accountService
+                .GetAccountsByMember(transactionInfo.MemberId)
                 .FirstOrDefault(x => x.Id == transactionInfo.AccountId);
 
-            var getMemberAccounts = _accountService.GetAccountsByMember(transactionInfo.MemberId);
+            var getMemberAccounts = _accountService
+                .GetAccountsByMember(transactionInfo.MemberId);
+
             var getMember = _memberService.GetMember(transactionInfo.MemberId);
 
             memberAccountInfo.TotalAmounts = memberAccountInfo.TotalAmounts - transactionInfo.TransactionAmounts;
