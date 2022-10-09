@@ -70,6 +70,23 @@ namespace Repository
             return entity;
         }
 
+       public virtual List<T> AddAll(List<T> entityList)
+        {
+            int userId;
+            int.TryParse(_User.GetUser(), out userId);
+
+            for(var i=0; i<= entityList.Count; i++)
+            {
+                var entity = entityList[i];
+                _Context.Entry(entity).State = EntityState.Added;
+                entity = _Entities.Add(entity).Entity;
+                entity.CreationDate = DateTime.UtcNow;
+                entity.CreatedBy = (userId == 0 ? 0 : userId);
+            }
+            _Context.SaveChanges();
+            return entityList;
+        }
+
         public virtual void Delete(T entity)
         {
             _Context.Entry(entity).State = EntityState.Modified;

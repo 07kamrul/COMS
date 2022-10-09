@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using Service;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -100,7 +101,7 @@ namespace COMS.Controllers
 
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("GetRequestVerifyTransactions")]
-        public List<TransactionResponse> GetRequestVerifyransactions()
+        public List<TransactionResponse> GetRequestVerifyTransactions()
         {
             _logger.Information("Get Request Verify Members started.");
             try
@@ -135,23 +136,24 @@ namespace COMS.Controllers
         [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpPost("SaveTransaction")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public TransactionResponse SaveMember([FromBody] TransactionRequest transaction)
+        public ActionResult SaveTransaction([FromBody] TransactionRequest transaction)
         {
             _logger.Information("Save member started");
             try
             {
-                if (transaction.MemberId == 0 || transaction.TransactionAmounts == 0
-                    || transaction.TransactionType == 0 || transaction.TransactionDate == null)
+                if (transaction.MemberId == 0 || transaction.AccountId == 0
+                    || transaction.TransactionAmounts == 0 || transaction.TransactionType == 0)
                 {
-                    throw new BadHttpRequestException("This Email or Code or Phone invalid.");
+                    throw new BadHttpRequestException("This MemberId or AccountId or TransactionAmounts or TransactionType invalid.");
                 }
 
-                return _transactionService.SaveTransaction(transaction);
+                _transactionService.SaveTransaction(transaction);
+                return Ok();
             }
             catch (Exception ex)
             {
                 _logger.Error(ex.Message);
-                throw;
+                return Problem(ex.Message, null, (int)HttpStatusCode.InternalServerError);
             }
         }
 

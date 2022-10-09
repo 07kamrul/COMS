@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Core.ViewModels
 {
@@ -17,7 +18,6 @@ namespace Core.ViewModels
         public bool IsVerified { get; set; }
         public int? VerifiedBy { get; set; }
         public DateTime? VerificationDate { get; set; }
-        public AttachmentResponse Attachment { get; set; }
+        public List<AttachmentResponse> Attachments { get; set; }
     }
-
 }

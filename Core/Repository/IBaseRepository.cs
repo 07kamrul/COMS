@@ -15,6 +15,7 @@ namespace Core.Repository
         IQueryable<T> FindBy(Expression<Func<T,bool>> predicate);
         IQueryable<T> FindBy(Expression<Func<T,bool>> predicate, int skip, int take);
         T Add(T entity);
+        List<T> AddAll(List<T> entityList);
         void Delete(T entity);
         void HardDelete(T entity);
         T Update(T entity);
