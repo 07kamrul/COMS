@@ -154,10 +154,15 @@ namespace Service
                                 .Sum(x => x.PayableAmounts);
 
                             memberAccountInfo.TotalAmounts = _transactionRepository
-                                .GetAll().Sum(ta => ta.TransactionAmounts);
+                                .GetAll().Where(d => d.TransactionType == TransactionType.Deposit)
+                                .Sum(ta => ta.TransactionAmounts)
+                                - _transactionRepository
+                                .GetAll().Where(d => d.TransactionType == TransactionType.Withdraw)
+                                .Sum(ta => ta.TransactionAmounts);
 
                             memberAccountInfo.DueAmounts = _transactionRepository
-                                .GetAll().OrderByDescending(t => t.TransactionDate)
+                                .GetAll().Where(d => d.TransactionType == TransactionType.Deposit)
+                                .OrderByDescending(t => t.TransactionDate)
                                 .FirstOrDefault().DueAmounts;
                                                         
                             var accountTransaction = _mapper.Map<AccountRequest>(memberAccountInfo);
@@ -312,6 +317,7 @@ namespace Service
             else
             {
                 var memberLastTransaction = memberAllTransaction
+                    .Where(d => d.TransactionType == TransactionType.Deposit)
                     .OrderByDescending(x => x.TransactionDate)
                     .FirstOrDefault();
 
