@@ -45,8 +45,9 @@ namespace COMS.Controllers
             }
         }
 
-
-        [ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [AllowAnonymous]
+        //[ClaimRequirement(PermissionType.Admin, PermissionType.Checker, PermissionType.Maker, PermissionType.Viewer)]
         [HttpGet("GetMembers")]
         public List<MemberResponse> GetMembers()
         {
